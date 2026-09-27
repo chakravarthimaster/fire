@@ -79,6 +79,11 @@ Useful while editing:
 node tools/snap.mjs --scene alphago 12   # contact sheet of one scene
 node tools/snap.mjs 225.5                # a single full-size frame
 node tools/render.mjs --from 180 --to 190  # re-render a time range
+bash tools/encode.sh                       # re-encode after re-rendering frames
+
+# a smaller copy for sharing (about 26 MB)
+SCALE=1280:720 VBITRATE=520k ABITRATE=112k POSTER=0 \
+  OUT=build/share/the-thinking-machine-720p.mp4 bash tools/encode.sh
 ```
 
 To watch a real-time preview in a browser, serve the folder (for example

@@ -13,6 +13,10 @@ DUR=$(python3 -c "print(f'{$FRAMES / 30:.3f}')")
 # Two-pass VBR keeps the 1080p file under GitHub's 100 MB limit while giving
 # the busy scenes the bits they need.
 VBITRATE="${VBITRATE:-1800k}"
+ABITRATE="${ABITRATE:-160k}"
+# Optional downscale for a smaller copy, e.g. SCALE=1280:720
+VF=()
+[ -n "${SCALE:-}" ] && VF=(-vf "scale=${SCALE}:flags=lanczos")
 enc() {
   "$FFMPEG" -hide_banner -loglevel warning -stats -y \
     -framerate 30 -i build/frames/f%05d.jpg \
@@ -20,13 +24,13 @@ enc() {
     -i build/subtitles.srt \
     -i build/chapters.txt \
     -map 0:v -map 1:a -map 2:s -map_metadata 3 -map_chapters 3 -t "$DUR" \
-    -c:v libx264 -preset slow -tune film -profile:v high -pix_fmt yuv420p \
+    "${VF[@]}" -c:v libx264 -preset slow -tune film -profile:v high -pix_fmt yuv420p \
     -b:v "$VBITRATE" -maxrate 7M -bufsize 14M -g 60 -bf 3 \
     -passlogfile build/x264pass "$@"
 }
 enc -pass 1 -an -sn -f mp4 /dev/null
 enc -pass 2 -movflags +faststart \
-  -c:a aac -b:a 160k -ar 48000 \
+  -c:a aac -b:a "$ABITRATE" -ar 48000 \
   -c:s mov_text -metadata:s:s:0 language=eng \
   -metadata title="The Thinking Machine — A History of Artificial Intelligence" \
   -metadata comment="Pictures, music and narration generated entirely from code." \
@@ -34,5 +38,5 @@ enc -pass 2 -movflags +faststart \
 cp build/subtitles.srt "${OUT%.mp4}.srt"
 
 # Poster: the title card, just after it locks in.
-"$FFMPEG" -hide_banner -loglevel error -y -ss 21.6 -i "$OUT" -frames:v 1 -q:v 3 "$(dirname "$OUT")/poster.jpg"
+[ "${POSTER:-1}" = 1 ] && "$FFMPEG" -hide_banner -loglevel error -y -ss 21.6 -i "$OUT" -frames:v 1 -q:v 3 "$(dirname "$OUT")/poster.jpg"
 echo "wrote $OUT"
