@@ -1,0 +1,253 @@
+1
+00:00:26,400 --> 00:00:30,764
+For thousands of years, we have dreamed of
+minds made by human hands.
+
+2
+00:00:31,314 --> 00:00:33,461
+Bronze giants in Greek myth.
+
+3
+00:00:33,661 --> 00:00:36,860
+Clockwork figures that played music and
+wrote letters.
+
+4
+00:00:37,410 --> 00:00:45,039
+And in 1843, Ada Lovelace imagined an
+engine that could weave algebra, the way a loom weaves flowers.
+
+5
+00:00:47,389 --> 00:00:56,200
+In 1943, Warren McCulloch and Walter Pitts
+showed that simple switches, wired like neurons, could compute logic.
+
+6
+00:00:56,650 --> 00:00:58,825
+The artificial neuron was born.
+
+7
+00:01:01,375 --> 00:01:04,790
+In 1950, Alan Turing proposed a test.
+
+8
+00:01:05,240 --> 00:01:10,786
+If a machine could talk so well that we
+couldn't tell it from a person, could we still say it doesn't think?
+
+9
+00:01:13,336 --> 00:01:19,121
+In the summer of 1956, a workshop at
+Dartmouth College gave the dream its name.
+
+10
+00:01:20,171 --> 00:01:21,952
+Artificial intelligence.
+
+11
+00:01:23,002 --> 00:01:30,041
+Its founders believed every aspect of
+learning could be described so precisely that a machine could simulate it.
+
+12
+00:01:30,491 --> 00:01:34,011
+They thought real progress could be made
+in a single summer.
+
+13
+00:01:36,861 --> 00:01:44,500
+Two years later, Frank Rosenblatt unveiled
+the Perceptron, a machine that learned to recognize patterns on its own.
+
+14
+00:01:44,950 --> 00:01:50,815
+Newspapers predicted it would one day
+walk, talk, and be conscious of its own existence.
+
+15
+00:01:53,165 --> 00:01:58,705
+In 1966, a program called ELIZA imitated a
+psychotherapist.
+
+16
+00:01:59,255 --> 00:02:00,810
+It understood nothing.
+
+17
+00:02:01,060 --> 00:02:06,780
+Yet its creator's own secretary asked him
+to leave the room, so she could talk to it in private.
+
+18
+00:02:09,730 --> 00:02:12,158
+But the promises outran the machines.
+
+19
+00:02:12,708 --> 00:02:17,036
+Computers were too slow, the world too
+complex, and the funding froze.
+
+20
+00:02:17,986 --> 00:02:20,176
+The first AI winter had begun.
+
+21
+00:02:21,526 --> 00:02:25,140
+In the 1980s, expert systems brought a
+brief thaw.
+
+22
+00:02:25,490 --> 00:02:27,628
+Then, a second winter set in.
+
+23
+00:02:31,378 --> 00:02:35,805
+Through the long cold, a few researchers
+kept faith in neural networks.
+
+24
+00:02:36,255 --> 00:02:43,469
+In 1986, they popularized backpropagation,
+a way for networks to learn from their own mistakes.
+
+25
+00:02:43,919 --> 00:02:48,540
+Soon, Yann LeCun's networks were reading
+handwritten digits on envelopes.
+
+26
+00:02:50,890 --> 00:02:57,364
+In 1997, IBM's Deep Blue defeated the
+world chess champion, Garry Kasparov.
+
+27
+00:02:57,814 --> 00:03:01,530
+It could examine two hundred million
+positions every second.
+
+28
+00:03:01,880 --> 00:03:03,841
+But chess was all it could do.
+
+29
+00:03:06,291 --> 00:03:08,335
+Then, three forces collided.
+
+30
+00:03:08,785 --> 00:03:10,989
+Oceans of data from the internet.
+
+31
+00:03:11,189 --> 00:03:13,570
+Graphics chips built for video games.
+
+32
+00:03:13,770 --> 00:03:16,025
+And networks deeper than ever before.
+
+33
+00:03:16,575 --> 00:03:24,155
+In 2012, a network called AlexNet crushed
+the ImageNet challenge, created by Fei-Fei Li and her team.
+
+34
+00:03:24,805 --> 00:03:27,190
+The deep learning revolution had begun.
+
+35
+00:03:31,540 --> 00:03:38,436
+In 2016, DeepMind's AlphaGo challenged Lee
+Sedol, one of the greatest Go players of all time.
+
+36
+00:03:38,886 --> 00:03:43,193
+Go has more possible positions than there
+are atoms in the universe.
+
+37
+00:03:43,843 --> 00:03:49,156
+In game two, on move thirty-seven, AlphaGo
+played a move no human would have played.
+
+38
+00:03:50,706 --> 00:03:52,957
+Commentators thought it was a mistake.
+
+39
+00:03:53,207 --> 00:03:54,442
+It was brilliant.
+
+40
+00:03:54,892 --> 00:03:57,677
+AlphaGo won the match, four games to one.
+
+41
+00:04:00,427 --> 00:04:07,733
+In 2017, eight researchers at Google
+published a paper with a bold title: Attention Is All You Need.
+
+42
+00:04:08,282 --> 00:04:12,889
+Their Transformer could weigh every word
+against every other word, all at once.
+
+43
+00:04:13,139 --> 00:04:14,310
+And it scaled.
+
+44
+00:04:16,760 --> 00:04:20,914
+Language models grew from millions of
+parameters to billions.
+
+45
+00:04:21,164 --> 00:04:24,037
+They learned to write, to translate, and
+to code.
+
+46
+00:04:24,687 --> 00:04:31,532
+Then, on November 30th, 2022, ChatGPT put
+that power into everyone's hands.
+
+47
+00:04:32,582 --> 00:04:35,890
+One hundred million people tried it within
+two months.
+
+48
+00:04:38,540 --> 00:04:40,977
+Since then, the pace has only quickened.
+
+49
+00:04:41,327 --> 00:04:44,435
+AI now writes and paints, speaks and sees.
+
+50
+00:04:44,885 --> 00:04:48,470
+It has predicted the shapes of nearly
+every known protein.
+
+51
+00:04:48,720 --> 00:04:54,473
+In 2024, its pioneers received Nobel
+Prizes in physics and chemistry.
+
+52
+00:04:54,923 --> 00:05:00,824
+It solves olympiad mathematics, writes
+software, and more and more, it acts on our behalf.
+
+53
+00:05:04,974 --> 00:05:09,418
+More than seventy years ago, Alan Turing
+asked whether machines could think.
+
+54
+00:05:10,068 --> 00:05:12,074
+We are still debating the answer.
+
+55
+00:05:12,924 --> 00:05:15,873
+But a new question now belongs to all of
+us.

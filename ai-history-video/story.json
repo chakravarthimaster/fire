@@ -1,0 +1,213 @@
+{
+  "title": "The Thinking Machine",
+  "subtitle": "A History of Artificial Intelligence",
+  "voice": "af_heart",
+  "speed": 0.9,
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "scenes": [
+    {
+      "id": "opening",
+      "chapter": "Prologue: Can Machines Think?",
+      "min": 25,
+      "clips": []
+    },
+    {
+      "id": "dream",
+      "chapter": "The Ancient Dream",
+      "lead": 1.4,
+      "tail": 1.6,
+      "clips": [
+        { "key": "a", "text": "For thousands of years, we have dreamed of minds made by human hands.", "gap": 0.8 },
+        { "key": "b1", "text": "Bronze giants in Greek myth.", "gap": 0.45 },
+        { "key": "b2", "text": "Clockwork figures that played music and wrote letters.", "gap": 0.8 },
+        { "key": "c", "text": "And in 1843, Ada Lovelace imagined an engine that could weave algebra, the way a loom weaves flowers.",
+          "say": "And in eighteen forty-three, Ada Lovelace imagined an engine that could weave algebra, the way a loom weaves flowers." }
+      ]
+    },
+    {
+      "id": "neuron",
+      "chapter": "1943 · The Artificial Neuron",
+      "lead": 1.0,
+      "tail": 1.8,
+      "clips": [
+        { "key": "a", "text": "In 1943, Warren McCulloch and Walter Pitts showed that simple switches, wired like neurons, could compute logic.",
+          "say": "In nineteen forty-three, Warren McCulloch and Walter Pitts showed that simple switches, wired like neurons, could compute logic.", "gap": 0.7 },
+        { "key": "b", "text": "The artificial neuron was born." }
+      ]
+    },
+    {
+      "id": "turing",
+      "chapter": "1950 · The Imitation Game",
+      "lead": 1.0,
+      "tail": 1.8,
+      "clips": [
+        { "key": "a", "text": "In 1950, Alan Turing proposed a test.",
+          "say": "In nineteen fifty, Alan Turing proposed a test.", "gap": 0.7 },
+        { "key": "b", "text": "If a machine could talk so well that we couldn't tell it from a person, could we still say it doesn't think?" }
+      ]
+    },
+    {
+      "id": "dartmouth",
+      "chapter": "1956 · A Field Is Born",
+      "lead": 1.0,
+      "tail": 2.2,
+      "clips": [
+        { "key": "a", "text": "In the summer of 1956, a workshop at Dartmouth College gave the dream its name.",
+          "say": "In the summer of nineteen fifty-six, a workshop at Dartmouth College gave the dream its name.", "gap": 1.3 },
+        { "key": "b", "text": "Artificial intelligence.", "gap": 1.3 },
+        { "key": "c", "text": "Its founders believed every aspect of learning could be described so precisely that a machine could simulate it.", "gap": 0.7 },
+        { "key": "d", "text": "They thought real progress could be made in a single summer." }
+      ]
+    },
+    {
+      "id": "perceptron",
+      "chapter": "1958 · The Perceptron",
+      "lead": 0.9,
+      "tail": 1.6,
+      "clips": [
+        { "key": "a", "text": "Two years later, Frank Rosenblatt unveiled the Perceptron, a machine that learned to recognize patterns on its own.", "gap": 0.7 },
+        { "key": "b", "text": "Newspapers predicted it would one day walk, talk, and be conscious of its own existence." }
+      ]
+    },
+    {
+      "id": "eliza",
+      "chapter": "1966 · ELIZA",
+      "lead": 1.0,
+      "tail": 1.6,
+      "clips": [
+        { "key": "a", "text": "In 1966, a program called ELIZA imitated a psychotherapist.",
+          "say": "In nineteen sixty-six, a program called Eliza imitated a psychotherapist.", "gap": 0.8 },
+        { "key": "b1", "text": "It understood nothing.", "gap": 0.5 },
+        { "key": "b2", "text": "Yet its creator's own secretary asked him to leave the room, so she could talk to it in private." }
+      ]
+    },
+    {
+      "id": "winter",
+      "chapter": "The AI Winters",
+      "lead": 1.6,
+      "tail": 2.8,
+      "clips": [
+        { "key": "a", "text": "But the promises outran the machines.", "gap": 0.8 },
+        { "key": "b", "text": "Computers were too slow, the world too complex, and the funding froze.", "gap": 1.2 },
+        { "key": "c", "text": "The first AI winter had begun.", "gap": 1.6 },
+        { "key": "d1", "text": "In the 1980s, expert systems brought a brief thaw.",
+          "say": "In the nineteen-eighties, expert systems brought a brief thaw.", "gap": 0.6 },
+        { "key": "d2", "text": "Then, a second winter set in." }
+      ]
+    },
+    {
+      "id": "believers",
+      "chapter": "The Believers",
+      "lead": 1.2,
+      "tail": 1.6,
+      "clips": [
+        { "key": "a", "text": "Through the long cold, a few researchers kept faith in neural networks.", "gap": 0.7 },
+        { "key": "b", "text": "In 1986, they popularized backpropagation, a way for networks to learn from their own mistakes.",
+          "say": "In nineteen eighty-six, they popularized backpropagation, a way for networks to learn from their own mistakes.", "gap": 0.7 },
+        { "key": "c", "text": "Soon, Yann LeCun's networks were reading handwritten digits on envelopes." }
+      ]
+    },
+    {
+      "id": "deepblue",
+      "chapter": "1997 · Deep Blue",
+      "lead": 1.0,
+      "tail": 1.8,
+      "clips": [
+        { "key": "a", "text": "In 1997, IBM's Deep Blue defeated the world chess champion, Garry Kasparov.",
+          "say": "In nineteen ninety-seven, IBM's Deep Blue defeated the world chess champion, Garry Kasparov.", "gap": 0.7 },
+        { "key": "b1", "text": "It could examine two hundred million positions every second.", "gap": 0.6 },
+        { "key": "b2", "text": "But chess was all it could do." }
+      ]
+    },
+    {
+      "id": "deeplearning",
+      "chapter": "2012 · The Deep Learning Revolution",
+      "lead": 0.9,
+      "tail": 3.6,
+      "clips": [
+        { "key": "a", "text": "Then, three forces collided.", "gap": 0.7 },
+        { "key": "b1", "text": "Oceans of data from the internet.", "gap": 0.45 },
+        { "key": "b2", "text": "Graphics chips built for video games.", "gap": 0.45 },
+        { "key": "b3", "text": "And networks deeper than ever before.", "gap": 0.8 },
+        { "key": "c", "text": "In 2012, a network called AlexNet crushed the ImageNet challenge, created by Fei-Fei Li and her team.",
+          "say": "In twenty twelve, a network called Alex Net crushed the Image Net challenge, created by Fei-Fei Lee and her team.", "gap": 0.9 },
+        { "key": "d", "text": "The deep learning revolution had begun." }
+      ]
+    },
+    {
+      "id": "alphago",
+      "chapter": "2016 · AlphaGo and Move 37",
+      "lead": 1.0,
+      "tail": 2.0,
+      "clips": [
+        { "key": "a", "text": "In 2016, DeepMind's AlphaGo challenged Lee Sedol, one of the greatest Go players of all time.",
+          "say": "In twenty sixteen, Deep Mind's Alpha Go challenged Lee Sedol, one of the greatest Go players of all time.", "gap": 0.7 },
+        { "key": "b", "text": "Go has more possible positions than there are atoms in the universe.", "gap": 0.9 },
+        { "key": "c", "text": "In game two, on move thirty-seven, AlphaGo played a move no human would have played.",
+          "say": "In game two, on move thirty-seven, Alpha Go played a move no human would have played.", "gap": 1.8 },
+        { "key": "d1", "text": "Commentators thought it was a mistake.", "gap": 0.5 },
+        { "key": "d2", "text": "It was brilliant.", "gap": 0.7 },
+        { "key": "d3", "text": "AlphaGo won the match, four games to one.",
+          "say": "Alpha Go won the match, four games to one." }
+      ]
+    },
+    {
+      "id": "transformer",
+      "chapter": "2017 · Attention Is All You Need",
+      "lead": 1.0,
+      "tail": 1.8,
+      "clips": [
+        { "key": "a", "text": "In 2017, eight researchers at Google published a paper with a bold title: Attention Is All You Need.",
+          "say": "In twenty seventeen, eight researchers at Google published a paper with a bold title: Attention Is All You Need.", "gap": 0.8 },
+        { "key": "b1", "text": "Their Transformer could weigh every word against every other word, all at once.", "gap": 0.5 },
+        { "key": "b2", "text": "And it scaled." }
+      ]
+    },
+    {
+      "id": "scale",
+      "chapter": "2018–2022 · Scale, and ChatGPT",
+      "lead": 0.9,
+      "tail": 2.0,
+      "clips": [
+        { "key": "a1", "text": "Language models grew from millions of parameters to billions.", "gap": 0.5 },
+        { "key": "a2", "text": "They learned to write, to translate, and to code.", "gap": 0.9 },
+        { "key": "b", "text": "Then, on November 30th, 2022, ChatGPT put that power into everyone's hands.",
+          "say": "Then, on November thirtieth, twenty twenty-two, Chat G P T put that power into everyone's hands.", "gap": 1.3 },
+        { "key": "c", "text": "One hundred million people tried it within two months." }
+      ]
+    },
+    {
+      "id": "present",
+      "chapter": "The Present",
+      "lead": 0.9,
+      "tail": 2.0,
+      "clips": [
+        { "key": "a", "text": "Since then, the pace has only quickened.", "gap": 0.6 },
+        { "key": "b", "text": "AI now writes and paints, speaks and sees.", "gap": 0.7 },
+        { "key": "c1", "text": "It has predicted the shapes of nearly every known protein.", "gap": 0.5 },
+        { "key": "c2", "text": "In 2024, its pioneers received Nobel Prizes in physics and chemistry.",
+          "say": "In twenty twenty-four, its pioneers received Nobel Prizes in physics and chemistry.", "gap": 0.7 },
+        { "key": "d", "text": "It solves olympiad mathematics, writes software, and more and more, it acts on our behalf." }
+      ]
+    },
+    {
+      "id": "epilogue",
+      "chapter": "Epilogue: A New Question",
+      "lead": 2.4,
+      "tail": 8.0,
+      "clips": [
+        { "key": "a", "text": "More than seventy years ago, Alan Turing asked whether machines could think.", "gap": 0.9 },
+        { "key": "b", "text": "We are still debating the answer.", "gap": 1.1 },
+        { "key": "c", "text": "But a new question now belongs to all of us." }
+      ]
+    },
+    {
+      "id": "finale",
+      "chapter": "Credits",
+      "min": 17,
+      "clips": []
+    }
+  ]
+}
