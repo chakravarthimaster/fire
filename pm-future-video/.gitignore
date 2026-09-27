@@ -1,0 +1,5 @@
+# Large or regenerated artifacts
+/build/
+/models
+node_modules/
+__pycache__/

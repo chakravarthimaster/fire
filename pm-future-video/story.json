@@ -1,0 +1,197 @@
+{
+  "title": "What's Worth Building",
+  "subtitle": "The Future of Product Management in the Age of AI",
+  "voice": "af_heart",
+  "speed": 0.9,
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "scenes": [
+    {
+      "id": "cold_open",
+      "chapter": "Prologue: What Is Left for the Product Manager?",
+      "lead": 1.6,
+      "tail": 11.5,
+      "clips": [
+        { "key": "a", "text": "Today, an AI can draft a product spec in seconds.", "gap": 0.9 },
+        { "key": "b", "text": "It can summarize a thousand customer interviews overnight, write the code, and build the dashboard.", "gap": 1.6 },
+        { "key": "c", "text": "So what is left for the product manager?" }
+      ]
+    },
+    {
+      "id": "horizons",
+      "chapter": "Part I · Three Horizons: AI, AGI, ASI",
+      "lead": 3.6,
+      "tail": 1.8,
+      "clips": [
+        { "key": "a", "text": "To answer that, look at three horizons.", "gap": 0.8 },
+        { "key": "b", "text": "The first is already here: AI. Tools that write, analyze, design, and code alongside us.", "gap": 0.8 },
+        { "key": "c", "text": "The second may be coming: AGI, artificial general intelligence. Systems that could match people at most kinds of mental work.",
+          "say": "The second may be coming: A-G-I, artificial general intelligence. Systems that could match people at most kinds of mental work.", "gap": 0.8 },
+        { "key": "d", "text": "The third is still speculative: ASI, artificial superintelligence. Systems that would surpass us in nearly every field.",
+          "say": "The third is still speculative: A-S-I, artificial superintelligence. Systems that would surpass us in nearly every field.", "gap": 1.0 },
+        { "key": "e", "text": "No one knows the timeline. Some expect these horizons within years, others within decades, and some doubt they will come at all.", "gap": 0.8 },
+        { "key": "f", "text": "So the smart move isn't to predict the future. It's to prepare for all of it." }
+      ]
+    },
+    {
+      "id": "absorption",
+      "chapter": "What AI Already Does to PM Work",
+      "lead": 1.0,
+      "tail": 1.2,
+      "clips": [
+        { "key": "a", "text": "Start with what's changing right now.", "gap": 0.6 },
+        { "key": "b", "text": "Much of a product manager's week has always been production work: writing documents, synthesizing research, analyzing data, drafting tickets, and reporting status.", "gap": 0.7 },
+        { "key": "c", "text": "AI is absorbing that work, fast.", "gap": 0.9 },
+        { "key": "d", "text": "A single product manager can now build a working prototype in an afternoon, put it in front of real users that evening, and read the results the next morning.", "gap": 0.8 },
+        { "key": "e", "text": "The cost of building is collapsing. And when building gets cheap, something else becomes expensive." }
+      ]
+    },
+    {
+      "id": "bottleneck",
+      "chapter": "When Building Gets Cheap, Judgment Gets Expensive",
+      "lead": 0.8,
+      "tail": 2.0,
+      "clips": [
+        { "key": "a", "text": "Human judgment.", "gap": 1.3 },
+        { "key": "b", "text": "For decades, the hard part was building things. Now the hard part is knowing what to build, and knowing whether it's any good.", "gap": 0.9 },
+        { "key": "c", "text": "When almost anything can be built, the scarcest skill is deciding what's worth building." }
+      ]
+    },
+    {
+      "id": "agi",
+      "chapter": "The AGI Horizon: Orchestrating Intelligence",
+      "lead": 1.0,
+      "tail": 1.8,
+      "clips": [
+        { "key": "a", "text": "Now picture the second horizon.", "gap": 0.6 },
+        { "key": "b", "text": "AI agents that don't just assist, but act. They research the market, design the interface, write and test the code, and analyze the launch.", "gap": 0.8 },
+        { "key": "c", "text": "In that world, the product manager becomes an orchestrator of intelligence: setting the goal, the constraints, and the definition of success, then steering a team of people and agents toward it.", "gap": 1.0 },
+        { "key": "d", "text": "You won't manage a backlog. You'll manage outcomes." }
+      ]
+    },
+    {
+      "id": "asi",
+      "chapter": "The ASI Horizon: What Should Exist?",
+      "lead": 1.0,
+      "tail": 2.0,
+      "clips": [
+        { "key": "a", "text": "And the third horizon?", "gap": 0.8 },
+        { "key": "b", "text": "If machines ever surpass us at nearly everything, the question shifts from how to build, to what should exist at all.", "gap": 0.9 },
+        { "key": "c", "text": "Someone still has to decide what matters. Whose problems come first. Which trade-offs are acceptable. And who is accountable when something goes wrong.", "gap": 0.9 },
+        { "key": "d", "text": "Those are questions of values, trust, and responsibility. And they belong to people." }
+      ]
+    },
+    {
+      "id": "verdict",
+      "chapter": "Part II · The Verdict: Is PM Still a Good Career?",
+      "lead": 3.6,
+      "tail": 1.8,
+      "clips": [
+        { "key": "a", "text": "So, is product management a good career for someone starting today?", "gap": 1.0 },
+        { "key": "b", "text": "Yes. But not the old version of the job.", "gap": 1.0 },
+        { "key": "c", "text": "The product manager who mostly writes documents, runs meetings, and reports status is at real risk. Much of that work is being automated, and entry-level roles built on it are getting harder to find.", "gap": 0.9 },
+        { "key": "d", "text": "But the product manager who understands customers deeply, builds with AI, and makes sound decisions under uncertainty will be more valuable than ever, with more leverage than any product manager before.", "gap": 0.9 },
+        { "key": "e", "text": "The question isn't whether AI will take the job. It's whether you'll grow into the new one." }
+      ]
+    },
+    {
+      "id": "stack",
+      "chapter": "Part III · The Super PM: Seven Layers of Skill",
+      "lead": 3.6,
+      "tail": 2.2,
+      "clips": [
+        { "key": "i1", "text": "So what does the super level look like?", "gap": 0.5 },
+        { "key": "i2", "text": "Think of it as a stack of seven layers, each resting on the one below.", "gap": 1.0 },
+        { "key": "L1a", "text": "Layer one: customer obsession.", "gap": 0.5 },
+        { "key": "L1b", "text": "Talk to users every week. Understand their goals, their frustrations, and the workarounds they've invented. AI can summarize what people said. Only you can sit with them and notice what they didn't say.", "gap": 1.0 },
+        { "key": "L2a", "text": "Layer two: product sense and taste.", "gap": 0.5 },
+        { "key": "L2b", "text": "Study great products and broken ones, and write down why. Taste is trained through exposure, critique, and shipping. It's what lets you pick the right answer from a hundred AI-generated options.", "gap": 1.0 },
+        { "key": "L3a", "text": "Layer three: AI fluency.", "gap": 0.5 },
+        { "key": "L3b", "text": "Understand how models work: context, hallucinations, retrieval, fine-tuning, agents, and tools. Learn to write evaluations that define what good behavior looks like. And know the cost and speed of every AI feature you design.", "gap": 1.0 },
+        { "key": "L4a", "text": "Layer four: builder skills.", "gap": 0.5 },
+        { "key": "L4b", "text": "Prototype your own ideas with AI coding tools. Learn enough SQL and Python to answer your own questions, and enough about APIs to know what's possible. The best product managers of this era don't just tell. They show.",
+          "say": "Prototype your own ideas with AI coding tools. Learn enough S Q L and Python to answer your own questions, and enough about APIs to know what's possible. The best product managers of this era don't just tell. They show.", "gap": 1.0 },
+        { "key": "L5a", "text": "Layer five: data and experimentation.", "gap": 0.5 },
+        { "key": "L5b", "text": "Choose the metric that truly matters. Design clean experiments. And read the results honestly, especially when they disagree with you.", "gap": 1.0 },
+        { "key": "L6a", "text": "Layer six: domain depth.", "gap": 0.5 },
+        { "key": "L6b", "text": "General AI knowledge is becoming common. Deep knowledge of an industry, like healthcare, finance, education, or climate, combined with AI, is rare. Pick a domain, and go deep.", "gap": 1.0 },
+        { "key": "L7a", "text": "Layer seven: leadership, ethics, and trust.", "gap": 0.5 },
+        { "key": "L7b", "text": "Align people who want different things. Communicate with clarity. Catch risks to privacy, fairness, and safety before they ship. As machines do more of the work, the people we trust to decide become priceless.", "gap": 1.2 },
+        { "key": "Ca", "text": "And on top sits the skill that ties it all together: judgment, sharpened by learning speed.", "gap": 0.8 },
+        { "key": "Cb", "text": "Tools will change every few months. Your ability to learn, unlearn, and decide well is the moat that lasts." }
+      ]
+    },
+    {
+      "id": "knowledge",
+      "chapter": "The Knowledge Map",
+      "lead": 1.0,
+      "tail": 1.8,
+      "clips": [
+        { "key": "a", "text": "Here is the knowledge to build, in three rings.", "gap": 0.7 },
+        { "key": "b", "text": "The product core: discovery, strategy, prioritization, pricing and unit economics, go-to-market, and the psychology of the people you serve.", "gap": 0.8 },
+        { "key": "c", "text": "The AI core: language models, retrieval, fine-tuning, agents, evaluation, and the economics of running models at scale.", "gap": 0.8 },
+        { "key": "d", "text": "And the responsibility core: privacy, security, fairness, safety, and the laws taking shape around AI, like the European Union's AI Act." }
+      ]
+    },
+    {
+      "id": "roadmap",
+      "chapter": "Part IV · The Path: A Four-Stage Roadmap",
+      "lead": 3.6,
+      "tail": 2.2,
+      "clips": [
+        { "key": "a", "text": "How do you actually get there? Here is a path in four stages.", "gap": 1.0 },
+        { "key": "b", "text": "Stage one, the first three months: foundations. Read the classics of product management. Learn how AI models work. Use AI tools every day, and take apart ten AI products to see how they were made.", "gap": 1.0 },
+        { "key": "c", "text": "Stage two, months three to six: build. Ship two or three small AI products end to end, with real users. Write the spec, define the metrics, design the evaluations, and publish what you learned.", "gap": 1.0 },
+        { "key": "d", "text": "Stage three, months six to twelve: specialize. Choose your domain. Learn its data, its workflows, and its rules. Get close to an AI feature at work, or build one on your own.", "gap": 1.0 },
+        { "key": "e", "text": "Stage four, years one to three: lead. Own an AI product area. Orchestrate people and agents. Mentor others, and share your thinking in public." }
+      ]
+    },
+    {
+      "id": "habits",
+      "chapter": "Seven Habits of a Resilient PM",
+      "lead": 1.0,
+      "tail": 1.8,
+      "clips": [
+        { "key": "a", "text": "Along the way, seven habits keep you resilient.", "gap": 0.8 },
+        { "key": "h1", "text": "Use AI every day.", "gap": 0.45 },
+        { "key": "h2", "text": "Talk to a customer every week.", "gap": 0.45 },
+        { "key": "h3", "text": "Ship something every month.", "gap": 0.45 },
+        { "key": "h4", "text": "Put your thinking in writing.", "gap": 0.45 },
+        { "key": "h5", "text": "Study failures, including your own.", "gap": 0.45 },
+        { "key": "h6", "text": "Learn in public.", "gap": 0.45 },
+        { "key": "h7", "text": "And protect time to think deeply, away from the screen." }
+      ]
+    },
+    {
+      "id": "breaking_in",
+      "chapter": "How to Break In",
+      "lead": 1.0,
+      "tail": 2.0,
+      "clips": [
+        { "key": "a", "text": "And if you're trying to break in, there is more than one door.", "gap": 0.8 },
+        { "key": "b1", "text": "Associate product manager programs.", "gap": 0.5 },
+        { "key": "b2", "text": "An internal move from engineering, design, data, support, or sales.", "gap": 0.5 },
+        { "key": "b3", "text": "A role at an early-stage startup.", "gap": 0.6 },
+        { "key": "b4", "text": "Or the most convincing path of all: build a real product yourself, and let the results speak." }
+      ]
+    },
+    {
+      "id": "epilogue",
+      "chapter": "Epilogue: Keep Getting Wiser",
+      "lead": 1.8,
+      "tail": 5.5,
+      "clips": [
+        { "key": "a", "text": "The tools will keep getting smarter.", "gap": 0.8 },
+        { "key": "b", "text": "Your job is to keep getting wiser.", "gap": 1.3 },
+        { "key": "c", "text": "Because when machines can build almost anything, the most valuable person in the room is the one who knows what's worth building." }
+      ]
+    },
+    {
+      "id": "finale",
+      "chapter": "Credits",
+      "min": 14,
+      "clips": []
+    }
+  ]
+}
