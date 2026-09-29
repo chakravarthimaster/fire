@@ -1,0 +1,484 @@
+<title>The Tag</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Oswald:wght@500;700&display=swap">
+<style>
+  /* Layout: full-width 2.39:1 film frame with controls, then a cutaway diagram beside three short notes. */
+  :root {
+    --bg: #0b0f11;
+    --panel: #12181b;
+    --panel2: #1a2226;
+    --line: #2a353a;
+    --fg: #e4e0d6;
+    --muted: #8d999e;
+    --ink: #3b6fd1;
+    --alarm: #e0503a;
+    --amber: #d9a05b;
+    --display: "Oswald", "Arial Narrow", Impact, sans-serif;
+    --body: "Barlow", "Helvetica Neue", Arial, sans-serif;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--body);
+    font-size: 16px;
+    line-height: 1.55;
+    padding-inline: 16px;
+    padding-block: 28px 56px;
+  }
+  main { max-width: 1040px; margin: 0 auto; display: flex; flex-direction: column; gap: 40px; }
+  header h1 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(2.2rem, 7vw, 3.6rem);
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    margin: 0;
+    line-height: 1.05;
+  }
+  header p { color: var(--muted); margin: 10px 0 0; max-width: 60ch; }
+  .film { display: flex; flex-direction: column; gap: 10px; }
+  .frame { background: #000; border: 1px solid var(--line); line-height: 0; }
+  canvas { width: 100%; height: auto; aspect-ratio: 960 / 402; display: block; }
+  .controls { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  button {
+    font: 600 0.8rem var(--body);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--fg);
+    background: var(--panel2);
+    border: 1px solid var(--line);
+    padding: 9px 16px;
+    cursor: pointer;
+  }
+  button:hover { border-color: var(--amber); }
+  button:focus-visible, input:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+  input[type=range] { flex: 1 1 200px; min-width: 0; accent-color: var(--amber); }
+  .tc { font-variant-numeric: tabular-nums; color: var(--muted); font-size: 0.85rem; letter-spacing: 0.08em; }
+  .science { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 32px; align-items: start; }
+  .science h2 {
+    font-family: var(--display);
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-size: 1.15rem;
+    margin: 0 0 14px;
+  }
+  .diagram { background: var(--panel); border: 1px solid var(--line); padding: 8px; }
+  .diagram svg { width: 100%; height: auto; display: block; }
+  .diagram text { font-family: var(--body); font-size: 13px; fill: var(--fg); }
+  .diagram .dim { fill: var(--muted); }
+  .notes { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+  .notes h3 { font: 600 0.78rem var(--body); letter-spacing: 0.16em; text-transform: uppercase; color: var(--amber); margin: 0 0 4px; }
+  .notes p { margin: 0; max-width: 62ch; }
+  .pulse { transform-origin: 50px 130px; animation: pulse 2.4s ease-out infinite; }
+  .pulse.p2 { animation-delay: 0.8s; }
+  .pulse.p3 { animation-delay: 1.6s; }
+  @keyframes pulse { from { opacity: 0.9; transform: scale(0.4); } to { opacity: 0; transform: scale(1.6); } }
+  @media (max-width: 760px) { .science { grid-template-columns: minmax(0, 1fr); } }
+  @media (prefers-reduced-motion: reduce) { .pulse { animation: none; opacity: 0.3; } }
+</style>
+
+<main>
+  <header>
+    <h1>The Tag</h1>
+    <p>A short film in slow motion: what a security tag is made of, what happens when someone rips one off a t-shirt, and how the shop finds out.</p>
+  </header>
+
+  <section class="film" aria-label="Animated short film">
+    <div class="frame"><canvas id="film" role="img" aria-label="Animated scene of a man pulling a security tag off a t-shirt in a shop. Ink bursts, an alarm sounds, shoppers turn, and a guard stops him at the door."></canvas></div>
+    <div class="controls">
+      <button id="play" type="button">Pause</button>
+      <button id="replay" type="button">Replay</button>
+      <input id="scrub" type="range" min="0" max="24" step="0.01" value="0" aria-label="Scrub film">
+      <span class="tc" id="tc">00:00.0</span>
+    </div>
+  </section>
+
+  <section class="science">
+    <div>
+      <h2>Inside a hard tag</h2>
+      <div class="diagram">
+        <svg viewBox="0 0 640 270" role="img" aria-label="Cutaway of a hard security tag showing the coil, ink vial, clutch and pin passing through fabric">
+          <g fill="none" stroke="var(--amber)" stroke-width="1.5" opacity="0.9">
+            <circle class="pulse" cx="50" cy="130" r="60"/>
+            <circle class="pulse p2" cx="50" cy="130" r="60"/>
+            <circle class="pulse p3" cx="50" cy="130" r="60"/>
+          </g>
+          <text x="10" y="252" class="dim">Gate antenna signal</text>
+          <rect x="90" y="70" width="270" height="130" rx="22" fill="var(--panel2)" stroke="var(--line)" stroke-width="2"/>
+          <g fill="none" stroke="var(--amber)" stroke-width="2">
+            <rect x="112" y="98" width="110" height="74" rx="8"/>
+            <rect x="122" y="108" width="90" height="54" rx="6"/>
+            <rect x="132" y="118" width="70" height="34" rx="4"/>
+          </g>
+          <rect x="236" y="82" width="50" height="16" rx="8" fill="var(--ink)"/>
+          <polygon points="290,104 350,118 350,152 290,166" fill="var(--panel)" stroke="var(--muted)" stroke-width="1.5"/>
+          <circle cx="322" cy="118" r="6" fill="var(--fg)"/>
+          <circle cx="322" cy="152" r="6" fill="var(--fg)"/>
+          <rect x="360" y="127" width="200" height="6" fill="var(--muted)"/>
+          <g stroke="var(--panel)" stroke-width="2">
+            <line x1="366" y1="127" x2="366" y2="133"/><line x1="380" y1="127" x2="380" y2="133"/>
+            <line x1="394" y1="127" x2="394" y2="133"/><line x1="408" y1="127" x2="408" y2="133"/>
+          </g>
+          <path d="M440 60 Q452 90 440 120 T440 190 L490 190 Q502 160 490 130 T490 60 Z" fill="#5c5148" opacity="0.85"/>
+          <circle cx="566" cy="130" r="14" fill="var(--muted)"/>
+          <g stroke="var(--muted)" stroke-width="1" fill="none">
+            <line x1="184" y1="98" x2="184" y2="46"/><line x1="261" y1="82" x2="261" y2="46"/>
+            <line x1="322" y1="166" x2="322" y2="222"/><line x1="470" y1="60" x2="470" y2="34"/>
+            <line x1="566" y1="144" x2="566" y2="222"/>
+          </g>
+          <text x="184" y="38" text-anchor="middle">Coil</text>
+          <text x="261" y="38" text-anchor="middle">Ink vial</text>
+          <text x="322" y="240" text-anchor="middle">Clutch</text>
+          <text x="470" y="26" text-anchor="middle">Fabric</text>
+          <text x="566" y="240" text-anchor="middle">Pin</text>
+        </svg>
+      </div>
+    </div>
+    <div class="notes">
+      <div>
+        <h3>The clamp</h3>
+        <p>The pin goes through the fabric and into the tag. Inside, small steel balls sit in a cone and grip the pin. A pull only makes the grip tighter. Only the shop's detacher releases it.</p>
+      </div>
+      <div>
+        <h3>The signal</h3>
+        <p>The coil in the tag answers the antennas at the door. If a tag that is still active walks through, the gate sounds an alarm.</p>
+      </div>
+      <div>
+        <h3>Forcing it</h3>
+        <p>Many tags also hold a glass vial of permanent ink. If the tag is broken open, the ink bursts onto the garment, so the shirt is ruined and marked as stolen.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+(function () {
+  var W = 960, H = 402, FLOOR = 330, DUR = 24, TPOP = 9.9;
+  var TAG = [226, 262];
+  var cv = document.getElementById('film'), ctx = cv.getContext('2d');
+  var dpr = Math.min(window.devicePixelRatio || 1, 2);
+  cv.width = W * dpr; cv.height = H * dpr;
+
+  var clamp = function (x, a, b) { a = a === undefined ? 0 : a; b = b === undefined ? 1 : b; return Math.min(b, Math.max(a, x)); };
+  var lerp = function (a, b, k) { return a + (b - a) * k; };
+  var sm = function (x) { x = clamp(x); return x * x * (3 - 2 * x); };
+  function rng(seed) { return function () { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }; }
+
+  var R = rng(11);
+  var ink = [];
+  for (var i = 0; i < 90; i++) {
+    var a = R() * Math.PI * 2, sp = 40 + R() * 210;
+    ink.push({ vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 50, r: 1.5 + R() * 4.5, life: 0.9 + R() * 1.3 });
+  }
+
+  var KF = [
+    [0, 1.05, 400, 230], [3, 1.12, 230, 240], [8.4, 1.35, 210, 250], [9.2, 2.3, 226, 262],
+    [10.9, 2.5, 226, 262], [12, 1.4, 300, 240], [13.2, 1.15, 480, 230], [14.5, 1.5, 640, 240],
+    [16, 1.8, 780, 250], [19, 1.4, 780, 250], [24, 1.2, 600, 230]
+  ];
+  function cam(t) {
+    var i = 0;
+    while (i < KF.length - 2 && t > KF[i + 1][0]) i++;
+    var a = KF[i], b = KF[i + 1], k = sm((t - a[0]) / (b[0] - a[0]));
+    var z = lerp(a[1], b[1], k), fx = lerp(a[2], b[2], k), fy = lerp(a[3], b[3], k);
+    return { z: z, fx: clamp(fx, W / 2 / z, W - W / 2 / z), fy: clamp(fy, H / 2 / z, H - H / 2 / z) };
+  }
+
+  function speed(t) {
+    if (t < 9.0) return 1;
+    if (t < 9.5) return lerp(1, 0.25, sm((t - 9.0) / 0.5));
+    if (t < 10.7) return 0.25;
+    if (t < 11.5) return lerp(0.25, 1, sm((t - 10.7) / 0.8));
+    return 1;
+  }
+
+  function person(x, o) {
+    var s = o.s || 1, fy = o.fy || FLOOR, face = o.face || 1;
+    ctx.save();
+    ctx.translate(x, fy); ctx.scale(face * s, s);
+    ctx.translate(0, -48); ctx.rotate(o.lean || 0); ctx.translate(0, 48);
+    ctx.strokeStyle = o.c; ctx.fillStyle = o.c; ctx.lineCap = 'round';
+    ctx.lineWidth = 9;
+    [0, Math.PI].forEach(function (k) {
+      var a = Math.sin((o.ph || 0) + k) * (o.amp || 0);
+      ctx.beginPath(); ctx.moveTo(0, -48); ctx.lineTo(Math.sin(a) * 48, -Math.cos(a) * 48); ctx.stroke();
+    });
+    ctx.lineWidth = 19;
+    ctx.beginPath(); ctx.moveTo(0, -52); ctx.lineTo(0, -82); ctx.stroke();
+    ctx.beginPath(); ctx.arc(0, -100, 10, 0, 7); ctx.fill();
+    if (o.cap) { ctx.fillRect(-11, -111, 22, 5); ctx.fillRect(2, -107, 16, 3); }
+    ctx.lineWidth = 7;
+    [o.armB || 0, o.armF || 0].forEach(function (th) {
+      ctx.beginPath(); ctx.moveTo(0, -80); ctx.lineTo(Math.sin(th) * 38, -80 + Math.cos(th) * 38); ctx.stroke();
+    });
+    ctx.restore();
+  }
+  function handPos(x, th, o) {
+    var s = o.s || 1;
+    return [x + (o.face || 1) * Math.sin(th) * 38 * s, (o.fy || FLOOR) + (-80 + Math.cos(th) * 38) * s];
+  }
+
+  function shirtPath() {
+    ctx.beginPath();
+    ctx.moveTo(-9, 8); ctx.lineTo(-25, 14); ctx.lineTo(-38, 34); ctx.lineTo(-28, 40); ctx.lineTo(-22, 33);
+    ctx.lineTo(-22, 88); ctx.lineTo(22, 88); ctx.lineTo(22, 33); ctx.lineTo(28, 40); ctx.lineTo(38, 34);
+    ctx.lineTo(25, 14); ctx.lineTo(9, 8); ctx.quadraticCurveTo(0, 20, -9, 8); ctx.closePath();
+  }
+  function shirt(x, y, rot, col, stain, hook) {
+    ctx.save(); ctx.translate(x, y); ctx.rotate(rot);
+    if (hook) { ctx.strokeStyle = '#7d8586'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(0, -10); ctx.lineTo(0, 8); ctx.stroke(); }
+    shirtPath(); ctx.fillStyle = col; ctx.fill();
+    if (stain > 0) {
+      ctx.save(); shirtPath(); ctx.clip();
+      ctx.fillStyle = 'rgba(28,66,170,0.92)';
+      [[-14, 44, 26], [-6, 60, 17], [-17, 62, 13], [-10, 34, 11], [-2, 48, 10]].forEach(function (b) {
+        ctx.beginPath(); ctx.arc(b[0], b[1], b[2] * stain, 0, 7); ctx.fill();
+      });
+      ctx.restore();
+    }
+    ctx.restore();
+  }
+  function rack(x0, x1, shirts, dim) {
+    ctx.save();
+    if (dim) ctx.globalAlpha = 0.55;
+    ctx.strokeStyle = '#5a6467'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(x0, 205); ctx.lineTo(x1, 205);
+    ctx.moveTo(x0 + 5, 205); ctx.lineTo(x0 + 5, FLOOR); ctx.moveTo(x1 - 5, 205); ctx.lineTo(x1 - 5, FLOOR); ctx.stroke();
+    shirts.forEach(function (s) { shirt(s[0], 215, 0, s[1], 0, true); });
+    ctx.restore();
+  }
+
+  function scene(t) {
+    var g = ctx.createLinearGradient(0, 0, 0, FLOOR);
+    g.addColorStop(0, '#22323a'); g.addColorStop(1, '#141d21');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, FLOOR);
+    // shelves
+    for (var sx = 30; sx < 900; sx += 78) {
+      ctx.fillStyle = '#0f171a'; ctx.fillRect(sx, 112, 66, 5);
+      ['#3d4a55', '#544b42', '#46564f', '#5b5f63'].forEach(function (c, k) { ctx.fillStyle = c; ctx.fillRect(sx + 4 + k * 15, 92 - (k % 2) * 4, 13, 20 + (k % 2) * 4); });
+    }
+    // light shafts
+    ctx.fillStyle = 'rgba(217,160,91,0.07)';
+    [[520, 90], [680, 130], [840, 170]].forEach(function (p) {
+      ctx.beginPath(); ctx.moveTo(p[0], 0); ctx.lineTo(p[0] + 60, 0); ctx.lineTo(p[0] - p[1], FLOOR); ctx.lineTo(p[0] - p[1] - 110, FLOOR); ctx.closePath(); ctx.fill();
+    });
+    // door
+    var d = ctx.createLinearGradient(890, 0, 960, 0);
+    d.addColorStop(0, 'rgba(255,236,200,0.55)'); d.addColorStop(1, 'rgba(255,246,225,0.95)');
+    ctx.fillStyle = d; ctx.fillRect(890, 170, 70, FLOOR - 170);
+    ctx.fillStyle = 'rgba(255,220,170,0.10)';
+    ctx.beginPath(); ctx.moveTo(890, FLOOR); ctx.lineTo(960, FLOOR); ctx.lineTo(620, H); ctx.lineTo(500, H); ctx.closePath(); ctx.fill();
+    // floor
+    var f = ctx.createLinearGradient(0, FLOOR, 0, H);
+    f.addColorStop(0, '#12191c'); f.addColorStop(1, '#080b0c');
+    ctx.fillStyle = f; ctx.fillRect(0, FLOOR, W, H - FLOOR);
+    ctx.fillStyle = 'rgba(255,255,255,0.04)'; ctx.fillRect(0, FLOOR, W, 2);
+  }
+
+  function manState(t) {
+    var m = { x: -60, face: 1, ph: 0, amp: 0, armF: 0.1, armB: 0.1, lean: 0, held: false, up: false };
+    if (t < 3) return m;
+    if (t < 8.4) {
+      m.x = -60 + (t - 3) / 5.4 * 250; m.ph = t * 6.5; m.amp = 0.5;
+      m.armF = Math.sin(m.ph) * 0.4; m.armB = -Math.sin(m.ph) * 0.4; return m;
+    }
+    m.x = 190;
+    if (t < 9.2) { m.armF = lerp(0.35, 1.3, sm((t - 8.4) / 0.8)); return m; }
+    if (t < TPOP) { var k = sm((t - 9.2) / 0.7); m.armF = 1.3; m.lean = -0.16 * k; return m; }
+    if (t < 10.3) { var k2 = sm((t - TPOP) / 0.4); m.armF = lerp(1.3, 0.5, k2); m.lean = lerp(-0.16, 0.04, k2); return m; }
+    if (t < 10.9) { var k3 = sm((t - 10.3) / 0.6); m.armF = lerp(0.5, 1.3, Math.min(1, k3 * 2)) - (k3 > 0.5 ? (k3 - 0.5) * 1.0 : 0); m.held = k3 > 0.5; return m; }
+    m.held = true;
+    if (t < 11.5) { m.armF = 0.8; return m; }
+    var rx = 190 + (t - 11.5) * 142;
+    if (rx < 740) {
+      m.x = rx; m.ph = (t - 11.5) * 14; m.amp = 0.95; m.lean = 0.18;
+      m.armF = 0.9 + Math.sin(m.ph) * 0.15; m.armB = -Math.sin(m.ph) * 1.1; return m;
+    }
+    m.x = 740; m.lean = 0.05; m.armF = 0.6; m.armB = 0.1;
+    if (t > 15.6) { var u = sm((t - 15.6) / 0.6); m.armF = lerp(0.6, 2.9, u); m.armB = lerp(0.1, 2.9, u); m.held = t < 15.9; m.up = true; }
+    return m;
+  }
+
+  function draw(t) {
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+    var c = cam(t), tau = t - TPOP;
+    ctx.save();
+    ctx.translate(W / 2, H / 2); ctx.scale(c.z, c.z); ctx.translate(-c.fx, -c.fy);
+    if (tau > 0 && tau < 0.5) ctx.translate(Math.sin(tau * 90) * 3 * (1 - tau * 2), Math.cos(tau * 70) * 2 * (1 - tau * 2));
+    scene(t);
+
+    rack(470, 640, [[500, '#3a4650'], [545, '#50463f'], [590, '#3d4d47']], true);
+    rack(205, 430, [[285, '#4d5b57'], [330, '#5c5148'], [375, '#3d4a55']], false);
+
+    // target shirt
+    var m = manState(t);
+    if (t < 10.3) shirt(240, 215, 0, '#dfe3df', tau > 0 ? sm(tau / 0.8) : 0, true);
+
+    // crowd (back layer)
+    var crowd = [[430, 11.2, '#161d20'], [505, 11.5, '#1a2225'], [585, 11.9, '#141a1d']];
+    crowd.forEach(function (p, i) {
+      var turned = t >= p[1], face = 1;
+      if (turned) face = m.x > p[0] ? 1 : -1;
+      if (turned && t < p[1] + 0.6) face = -1;
+      var arm = (i === 2 && t > 12.2) ? 1.5 : 0.15;
+      person(p[0], { c: p[2], s: 0.86, fy: FLOOR - 16, face: face, armF: arm, armB: 0.15 });
+      if (turned && t < p[1] + 1.4) {
+        ctx.fillStyle = '#e0503a'; ctx.font = '700 22px Oswald, Impact, sans-serif'; ctx.textAlign = 'center';
+        ctx.fillText('!', p[0], FLOOR - 16 - 118);
+      }
+    });
+
+    // gate
+    var gateOn = t > 14.7;
+    [640, 700].forEach(function (gx) {
+      ctx.fillStyle = '#39454a'; ctx.fillRect(gx - 4, FLOOR - 118, 8, 118);
+      ctx.fillStyle = gateOn ? 'rgba(224,80,58,' + (0.6 + 0.4 * Math.sin(t * 20)) + ')' : '#5a686d';
+      ctx.fillRect(gx - 5, FLOOR - 128, 10, 10);
+    });
+    if (gateOn) {
+      for (var r = 0; r < 3; r++) {
+        var ph = ((t * 1.3) + r / 3) % 1;
+        ctx.strokeStyle = 'rgba(224,80,58,' + (0.5 * (1 - ph)) + ')'; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.ellipse(670, FLOOR - 62, 30 + ph * 150, 20 + ph * 90, 0, 0, 7); ctx.stroke();
+      }
+    }
+
+    // guard
+    var gx0 = t < 13.2 ? 1010 : (t < 15 ? 1010 - (t - 13.2) / 1.8 * 170 : 840);
+    if (gx0 < 1000) {
+      var walking = t >= 13.2 && t < 15;
+      person(gx0, { c: '#0b1013', s: 1.12, face: -1, cap: true, ph: t * 7, amp: walking ? 0.45 : 0, armF: 0.7, armB: 0.7 });
+    }
+
+    // man
+    if (m.x > -50) {
+      var mo = { c: '#0d1417', face: 1, ph: m.ph, amp: m.amp, armF: m.armF, armB: m.armB, lean: m.lean };
+      person(m.x, mo);
+      if (m.held) {
+        var hp = handPos(m.x, m.armF, mo), hx = hp[0], hy = hp[1], rot = 0.15 * Math.sin(t * 14);
+        if (t < 10.9) { var q = sm((t - 10.6) / 0.3); hx = lerp(240, hx, q); hy = lerp(215, hy, q); }
+        if (t > 15.9) { var dr = sm((t - 15.9) / 0.6); hy = Math.min(hy + dr * 200, FLOOR - 8); rot = lerp(rot, 1.5, dr); hx += dr * 16; }
+        shirt(hx, hy, rot, '#dfe3df', 1, false);
+      }
+    }
+
+    // flying tag + ink
+    if (tau > 0) {
+      var tx = TAG[0] - 80 * tau, ty = TAG[1] - 60 * tau + 0.5 * 500 * tau * tau;
+      if (ty > FLOOR - 4) ty = FLOOR - 4;
+      ctx.save(); ctx.translate(tx, ty); ctx.rotate(tau > 0.7 ? 1.1 : tau * 6);
+      ctx.fillStyle = '#20282b'; ctx.fillRect(-5, -8, 10, 16);
+      ctx.fillStyle = '#c9cfcf'; ctx.fillRect(-3, -6, 2, 5);
+      ctx.restore();
+      ink.forEach(function (p) {
+        if (tau > p.life) return;
+        var px = TAG[0] + p.vx * tau, py = TAG[1] + p.vy * tau + 0.5 * 420 * tau * tau;
+        if (py > FLOOR) py = FLOOR + 1;
+        ctx.fillStyle = 'rgba(38,84,196,' + (0.95 * (1 - tau / p.life * 0.6)) + ')';
+        ctx.beginPath(); ctx.arc(px, py, p.r, 0, 7); ctx.fill();
+      });
+      if (tau < 0.6) {
+        ctx.strokeStyle = 'rgba(255,255,255,' + (0.7 * (1 - tau / 0.6)) + ')'; ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.arc(TAG[0], TAG[1], tau / 0.6 * 90, 0, 7); ctx.stroke();
+      }
+    }
+    ctx.restore();
+
+    // screen space grade
+    ctx.globalCompositeOperation = 'soft-light';
+    var wash = ctx.createLinearGradient(0, H, W, 0);
+    wash.addColorStop(0, 'rgba(20,90,110,0.55)'); wash.addColorStop(1, 'rgba(255,150,70,0.5)');
+    ctx.fillStyle = wash; ctx.fillRect(0, 0, W, H);
+    ctx.globalCompositeOperation = 'source-over';
+    var vg = ctx.createRadialGradient(W / 2, H / 2, H * 0.35, W / 2, H / 2, W * 0.62);
+    vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,0.72)');
+    ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
+    if (t > 11.2 && t < 20) {
+      var al = 0.5 + 0.5 * Math.sin(t * 9);
+      ctx.fillStyle = 'rgba(210,30,25,' + (0.11 * al) + ')'; ctx.fillRect(0, 0, W, H);
+    }
+    var gr = rng(Math.floor(t * 30) + 3);
+    ctx.fillStyle = 'rgba(255,255,255,0.07)';
+    for (var n = 0; n < 140; n++) ctx.fillRect(gr() * W, gr() * H, 1.4, 1.4);
+
+    // hud
+    var sp = speed(t);
+    ctx.textAlign = 'left'; ctx.font = '500 11px Barlow, Arial, sans-serif'; ctx.fillStyle = 'rgba(228,224,214,0.7)';
+    if (sp < 0.99) ctx.fillText('SPEED ' + sp.toFixed(2) + 'x', 16, 22);
+
+    // captions
+    var caps = [
+      [3.4, 8.2, 'I. THE STORE', 'Every tag is a clamp, a pin and a coil.'],
+      [8.6, 10.9, 'THE PULL', 'Forced out of its clamp, the tag breaks open.'],
+      [11.0, 13.6, 'THE INK', 'A glass vial bursts and stains the shirt for good.'],
+      [13.8, 16.4, 'THE GATE', 'The coil answers the antennas. Every head turns.']
+    ];
+    caps.forEach(function (cp) {
+      var a = Math.min(sm((t - cp[0]) / 0.4), sm((cp[1] - t) / 0.4));
+      if (a <= 0) return;
+      ctx.globalAlpha = a; ctx.textAlign = 'left';
+      ctx.fillStyle = '#d9a05b'; ctx.font = '600 12px Barlow, Arial, sans-serif';
+      ctx.fillText(cp[2].split('').join(String.fromCharCode(8202)), 24, H - 46);
+      ctx.fillStyle = '#e4e0d6'; ctx.font = '500 17px Barlow, Arial, sans-serif';
+      ctx.fillText(cp[3], 24, H - 24);
+      ctx.globalAlpha = 1;
+    });
+
+    // title and end cards
+    var ta = t < 0.6 ? 1 : 1 - sm((t - 2.4) / 0.8);
+    if (ta > 0) {
+      ctx.fillStyle = 'rgba(0,0,0,' + ta + ')'; ctx.fillRect(0, 0, W, H);
+      var tt = Math.min(sm(t / 0.9), 1 - sm((t - 2.2) / 0.6));
+      ctx.globalAlpha = tt; ctx.textAlign = 'center'; ctx.fillStyle = '#e4e0d6';
+      ctx.font = '700 64px Oswald, Impact, sans-serif';
+      ctx.fillText('T H E   T A G', W / 2, H / 2 + 12);
+      ctx.font = '500 13px Barlow, Arial, sans-serif'; ctx.fillStyle = '#8d999e';
+      ctx.fillText('A SHORT FILM ABOUT A SMALL PLASTIC CLAMP', W / 2, H / 2 + 44);
+      ctx.globalAlpha = 1;
+    }
+    var ea = sm((t - 18.6) / 1.2);
+    if (ea > 0) {
+      ctx.fillStyle = 'rgba(0,0,0,' + (0.72 * ea) + ')'; ctx.fillRect(0, 0, W, H);
+      ctx.globalAlpha = ea; ctx.textAlign = 'center';
+      ctx.fillStyle = '#e0503a'; ctx.font = '700 72px Oswald, Impact, sans-serif';
+      ctx.fillText('C A U G H T', W / 2, H / 2 + 8);
+      ctx.fillStyle = '#e4e0d6'; ctx.font = '500 16px Barlow, Arial, sans-serif';
+      ctx.fillText('The clamp, the ink and the gate did their job.', W / 2, H / 2 + 42);
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  var t = 0, playing = true, last = 0;
+  var playBtn = document.getElementById('play'), replayBtn = document.getElementById('replay');
+  var scrub = document.getElementById('scrub'), tc = document.getElementById('tc');
+  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) { t = 10.5; playing = false; }
+
+  function ui() {
+    playBtn.textContent = playing ? 'Pause' : 'Play';
+    scrub.value = t;
+    var s = Math.floor(t), f = Math.floor((t - s) * 10);
+    tc.textContent = '00:' + (s < 10 ? '0' : '') + s + '.' + f;
+  }
+  function loop(ts) {
+    var dt = last ? Math.min(0.05, (ts - last) / 1000) : 0;
+    last = ts;
+    if (playing) {
+      t += dt * speed(t);
+      if (t >= DUR) { t = DUR; playing = false; }
+    }
+    draw(t); ui();
+    requestAnimationFrame(loop);
+  }
+  playBtn.addEventListener('click', function () { if (t >= DUR) t = 0; playing = !playing; });
+  replayBtn.addEventListener('click', function () { t = 0; playing = true; });
+  scrub.addEventListener('input', function () { t = parseFloat(scrub.value); playing = false; });
+  if (document.fonts && document.fonts.load) {
+    Promise.all([document.fonts.load('700 64px Oswald'), document.fonts.load('500 16px Barlow')]).catch(function () {}).then(function () { requestAnimationFrame(loop); });
+  } else { requestAnimationFrame(loop); }
+})();
+</script>
