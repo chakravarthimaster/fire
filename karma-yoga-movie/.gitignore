@@ -1,0 +1,9 @@
+build/
+output/
+fonts/
+assets/*
+!assets/.gitkeep
+voice/*
+!voice/.gitkeep
+music/*
+!music/.gitkeep
