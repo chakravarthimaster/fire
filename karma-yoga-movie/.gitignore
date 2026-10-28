@@ -7,3 +7,4 @@ voice/*
 !voice/.gitkeep
 music/*
 !music/.gitkeep
+__pycache__/
