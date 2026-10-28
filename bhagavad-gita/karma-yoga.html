@@ -1,0 +1,791 @@
+<title>Karma Yogam · Chapter 3</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Ramaraja&family=Noto+Sans+Telugu:wght@400;600&family=Tiro+Devanagari+Sanskrit&family=Tiro+Telugu&family=Spectral:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: a film reel. Hero title card in letterbox, then six "scenes" stacked like a screenplay,
+   each with a shot sheet (camera / VFX / grade / BGM) beside the shloka and dialogue.
+   A fixed canvas behind everything re-grades and changes its particle VFX per scene. */
+:root{
+  color-scheme: dark;
+  --ink:#07080a;          /* crushed black, the film base */
+  --panel:#0f1115e0;
+  --paper:#ece4d6;        /* projected-light white, slightly warm */
+  --dim:#a39b8e;
+  --line:#ffffff1f;
+  --gold:#e9b44c;         /* Krishna's peetambaram gold */
+  --teal:#3fa3a8;         /* the teal half of teal-and-orange */
+  --ember:#ff6a2b;
+  --g1:#3fa3a8; --g2:#e9b44c; --g3:#0b1a20;   /* live grade, swapped per scene by JS */
+
+  --f-display:"Cinzel","Trajan Pro",Georgia,serif;
+  --f-telugu-display:"Ramaraja","Tiro Telugu","Noto Sans Telugu",serif;
+  --f-telugu:"Noto Sans Telugu","Tiro Telugu",sans-serif;
+  --f-sanskrit:"Tiro Devanagari Sanskrit","Tiro Telugu","Noto Sans Telugu",serif;
+  --f-body:"Spectral",Georgia,"Times New Roman",serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+
+  --s-0:.78rem; --s-1:.9rem; --s-2:1.05rem; --s-3:1.3rem; --s-4:1.75rem; --s-5:2.6rem; --s-6:clamp(2.6rem,7vw,5.4rem);
+}
+*{box-sizing:border-box}
+body{
+  background:var(--ink); color:var(--paper);
+  font-family:var(--f-body); font-size:var(--s-2); line-height:1.65;
+  overflow-x:hidden;
+}
+#vfx{position:fixed; inset:0; width:100%; height:100%; z-index:0; pointer-events:none;
+  background:radial-gradient(ellipse at 50% 35%, color-mix(in srgb,var(--g3) 80%, transparent), var(--ink) 75%);
+  transition:background 1.6s ease}
+.grain,.vignette{position:fixed; inset:0; pointer-events:none; z-index:2}
+.vignette{background:radial-gradient(ellipse at center, transparent 55%, #000000c0 100%)}
+.grain{opacity:.09; mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  animation:grain 0.9s steps(4) infinite}
+@keyframes grain{0%{transform:translate(0,0)}25%{transform:translate(-3%,2%)}50%{transform:translate(2%,-3%)}75%{transform:translate(-2%,-1%)}100%{transform:translate(0,0)}}
+
+main{position:relative; z-index:3}
+.wrap{max-width:1120px; margin:0 auto;
+  padding-left:max(16px, env(safe-area-inset-left,0px)); padding-right:max(16px, env(safe-area-inset-right,0px))}
+
+/* ---------- HERO title card ---------- */
+.hero{position:relative; text-align:center; padding-block:0}
+.bar{height:clamp(28px,6vw,64px); background:#000}
+.hero-in{padding-block:clamp(48px,9vw,110px) clamp(40px,7vw,90px); display:grid; gap:18px; justify-items:center}
+.presents{font-family:var(--f-mono); font-size:var(--s-0); letter-spacing:.42em; text-transform:uppercase; color:var(--dim)}
+.tel-title{font-family:var(--f-telugu-display); font-size:clamp(3.4rem,13vw,8.5rem); line-height:1.05; margin:0;
+  background:linear-gradient(180deg,#fff6dc 0%, var(--gold) 45%, #8a4a12 100%); -webkit-background-clip:text; background-clip:text; color:transparent;
+  filter:drop-shadow(0 0 28px #e9b44c55); animation:titleIn 2.4s cubic-bezier(.2,.7,.1,1) both}
+.en-title{font-family:var(--f-display); font-weight:900; font-size:var(--s-6); letter-spacing:.14em; margin:0; line-height:1;
+  text-wrap:balance; animation:track 3s cubic-bezier(.2,.7,.1,1) both}
+.tag{font-family:var(--f-display); letter-spacing:.3em; font-size:var(--s-1); color:var(--gold); text-transform:uppercase}
+.logline{max-width:60ch; color:var(--dim); font-style:italic; font-size:var(--s-3); line-height:1.5; margin:6px 0 0}
+@keyframes titleIn{from{opacity:.25; transform:scale(1.12); filter:blur(10px) drop-shadow(0 0 0 #0000)}to{opacity:1; transform:none}}
+@keyframes track{from{letter-spacing:.6em; opacity:.3}to{letter-spacing:.14em; opacity:1}}
+.cta{display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top:14px}
+button{font:inherit; cursor:pointer}
+.btn{font-family:var(--f-mono); font-size:var(--s-0); letter-spacing:.2em; text-transform:uppercase;
+  padding:14px 22px; border:1px solid var(--gold); color:#160d02; background:var(--gold); border-radius:2px}
+.btn.ghost{background:transparent; color:var(--paper); border-color:var(--line)}
+.btn:hover{filter:brightness(1.12)} .btn.ghost:hover{border-color:var(--gold)}
+.btn:focus-visible,.chip:focus-visible,.scriptbtn:focus-visible{outline:2px solid var(--teal); outline-offset:3px}
+.credits{font-family:var(--f-mono); font-size:var(--s-0); color:var(--dim); letter-spacing:.12em; display:flex; flex-wrap:wrap; gap:6px 22px; justify-content:center; margin-top:18px}
+.credits b{color:var(--paper); font-weight:600}
+
+/* ---------- reel index ---------- */
+.reel{display:flex; gap:8px; flex-wrap:wrap; justify-content:center; padding-block:26px 8px}
+.chip{font-family:var(--f-mono); font-size:var(--s-0); letter-spacing:.08em; color:var(--paper); text-decoration:none;
+  border:1px solid var(--line); padding:8px 12px; display:flex; gap:8px; align-items:center; background:#00000055}
+.chip i{width:10px; height:10px; display:inline-block; border-radius:50%}
+.chip:hover{border-color:var(--gold)}
+
+/* ---------- scenes ---------- */
+.scene{position:relative; padding-block:clamp(56px,9vw,110px) 20px}
+.slate{display:flex; flex-wrap:wrap; gap:6px 18px; align-items:baseline; font-family:var(--f-mono); font-size:var(--s-0);
+  letter-spacing:.14em; text-transform:uppercase; color:var(--dim); border-top:1px solid var(--line); padding-top:14px}
+.slate .no{color:var(--accent); font-weight:600}
+.scene h2{margin:14px 0 4px; display:grid; gap:2px}
+.scene h2 .t{font-family:var(--f-telugu-display); font-weight:400; font-size:clamp(2.4rem,7vw,4.4rem); line-height:1.1; color:var(--accent);
+  text-shadow:0 0 30px color-mix(in srgb,var(--accent) 45%, transparent)}
+.scene h2 .e{font-family:var(--f-display); font-size:var(--s-4); letter-spacing:.12em; font-weight:700; text-wrap:balance}
+.premise{max-width:68ch; color:var(--dim); font-size:var(--s-3); line-height:1.5; font-style:italic; margin:8px 0 26px}
+
+.grid{display:grid; grid-template-columns:minmax(0,5fr) minmax(0,7fr); gap:22px}
+@media (max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}}
+
+.sheet{background:var(--panel); border:1px solid var(--line); padding:18px; display:grid; gap:14px; align-content:start; backdrop-filter:blur(6px)}
+.sheet h3,.panel h3{font-family:var(--f-mono); font-size:var(--s-0); letter-spacing:.24em; text-transform:uppercase; color:var(--accent); margin:0}
+.shot{display:grid; grid-template-columns:78px minmax(0,1fr); gap:10px; font-size:var(--s-1); line-height:1.5}
+.shot dt{font-family:var(--f-mono); font-size:.7rem; letter-spacing:.14em; color:var(--dim); padding-top:3px; text-transform:uppercase}
+.shot dd{margin:0}
+.lut{display:flex; height:30px; border:1px solid var(--line)}
+.lut span{flex:1; position:relative}
+.lut span::after{content:attr(data-hex); position:absolute; bottom:-18px; left:2px; font-family:var(--f-mono); font-size:.62rem; color:var(--dim)}
+.lutwrap{padding-bottom:16px}
+
+.panel{background:var(--panel); border:1px solid var(--line); padding:clamp(18px,3vw,30px); display:grid; gap:18px; backdrop-filter:blur(6px)}
+.shloka{font-family:var(--f-sanskrit); font-size:clamp(1.15rem,2.6vw,1.45rem); line-height:1.9; color:var(--paper); margin:0;
+  border-left:2px solid var(--accent); padding-left:16px}
+.shloka small{display:block; font-family:var(--f-mono); font-size:var(--s-0); color:var(--dim); letter-spacing:.14em; margin-top:4px}
+.trans{color:var(--dim); font-style:italic; margin:-6px 0 0; padding-left:18px; max-width:62ch}
+.dialogue{margin:0; display:grid; gap:6px}
+.dialogue .who{font-family:var(--f-mono); font-size:var(--s-0); letter-spacing:.24em; color:var(--accent); text-transform:uppercase}
+.dialogue .tel{font-family:var(--f-telugu); font-weight:600; font-size:clamp(1.25rem,3vw,1.6rem); line-height:1.6; color:#fff}
+.dialogue .en{font-family:var(--f-display); font-size:var(--s-2); letter-spacing:.04em; color:var(--paper)}
+.dialogue .tel::before{content:"“"} .dialogue .tel::after{content:"”"}
+
+.duo{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:22px; margin-top:22px}
+@media (max-width:860px){.duo{grid-template-columns:minmax(0,1fr)}}
+.duo article{background:#00000070; border:1px solid var(--line); padding:clamp(18px,3vw,28px); display:grid; gap:10px; align-content:start}
+.duo h4{margin:0; font-family:var(--f-display); font-size:var(--s-3); letter-spacing:.06em}
+.duo .kicker{font-family:var(--f-mono); font-size:var(--s-0); letter-spacing:.22em; color:var(--accent); text-transform:uppercase}
+.duo p{margin:0} .duo ul{margin:0; padding-left:1.1em; display:grid; gap:6px}
+.duo em{color:#fff}
+.reallife{border-color:color-mix(in srgb,var(--accent) 45%, transparent)!important}
+
+.versemap{display:flex; flex-wrap:wrap; gap:4px; margin-top:4px}
+.versemap span{font-family:var(--f-mono); font-size:.66rem; padding:3px 6px; border:1px solid var(--line); color:var(--dim)}
+.versemap span.key{border-color:var(--accent); color:var(--paper)}
+
+/* Interval & ending cards */
+.card{text-align:center; padding-block:clamp(60px,10vw,120px); display:grid; gap:10px; justify-items:center}
+.card .big{font-family:var(--f-telugu-display); font-size:clamp(3.4rem,12vw,7rem); line-height:1; color:var(--gold);
+  text-shadow:0 0 40px #e9b44c66}
+.card .sub{font-family:var(--f-display); letter-spacing:.5em; font-size:var(--s-2); text-transform:uppercase}
+.card p{max-width:56ch; color:var(--dim); font-style:italic; margin:0}
+
+/* Guna triad */
+.triad{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px}
+.triad div{border:1px solid var(--line); padding:10px; font-size:var(--s-1); line-height:1.45}
+.triad b{display:block; font-family:var(--f-telugu); font-size:var(--s-2)}
+@media (max-width:520px){.triad{grid-template-columns:minmax(0,1fr)}}
+
+/* Ladder (3.42) */
+.ladder{display:grid; gap:6px}
+.ladder div{display:grid; grid-template-columns:auto minmax(0,1fr); gap:12px; align-items:center; padding:10px 14px; border:1px solid var(--line); background:#00000060}
+.ladder div:nth-child(1){margin-inline:0 0; border-color:var(--gold); background:#e9b44c1a}
+.ladder div:nth-child(2){margin-left:4%} .ladder div:nth-child(3){margin-left:8%} .ladder div:nth-child(4){margin-left:12%}
+.ladder b{font-family:var(--f-telugu); font-weight:600; min-width:5.5em}
+.ladder span{font-size:var(--s-1); color:var(--dim)}
+
+/* Covers (3.38) */
+.covers{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px}
+.covers div{border:1px solid var(--line); padding:12px; display:grid; gap:6px; font-size:var(--s-1); line-height:1.45; background:#00000060}
+.covers b{font-family:var(--f-display); letter-spacing:.06em}
+.covers .lvl{font-family:var(--f-mono); font-size:.66rem; color:var(--accent); letter-spacing:.16em; text-transform:uppercase}
+@media (max-width:640px){.covers{grid-template-columns:minmax(0,1fr)}}
+
+/* Wheel (3.14) */
+.wheel{width:100%; max-width:360px; margin:0 auto; display:block}
+.wheel text{font-family:var(--f-telugu); font-size:13px; fill:var(--paper)}
+.wheel .en{font-family:var(--f-mono); font-size:9px; fill:var(--dim); letter-spacing:.08em}
+.wheel .ring{fill:none; stroke:var(--accent); stroke-width:1.2; stroke-dasharray:4 6; transform-origin:180px 180px; animation:spin 40s linear infinite}
+.wheel circle.node{fill:#0b0b0b; stroke:var(--accent); stroke-width:1.5}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Takeaways */
+.take{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr)); gap:12px; margin-top:22px; text-align:left; width:100%}
+.take div{border:1px solid var(--line); background:#00000080; padding:16px; display:grid; gap:6px}
+.take .v{font-family:var(--f-mono); font-size:.68rem; color:var(--gold); letter-spacing:.18em}
+.take b{font-family:var(--f-telugu); font-size:var(--s-2)}
+.take span{font-size:var(--s-1); color:var(--dim); line-height:1.5}
+
+.scriptbtn{position:fixed; right:max(14px, calc(env(safe-area-inset-right,0px) + 14px)); bottom:max(14px, calc(env(safe-area-inset-bottom,0px) + 14px)); z-index:20;
+  font-family:var(--f-mono); font-size:.7rem; letter-spacing:.14em; text-transform:uppercase; padding:10px 14px;
+  background:#000000cc; color:var(--paper); border:1px solid var(--line)}
+.scriptbtn b{color:var(--gold); font-weight:600}
+
+footer{font-family:var(--f-mono); font-size:var(--s-0); color:var(--dim); letter-spacing:.08em; text-align:center; padding-block:30px 60px; line-height:1.8}
+
+/* reveal: visible at rest, gently lifts in when JS marks it */
+.rv{transition:transform 1s cubic-bezier(.2,.7,.1,1), filter 1s ease}
+.rv.pre{transform:translateY(18px); filter:blur(2px)}
+
+/* ---------- TRAILER overlay ---------- */
+#trailer{position:fixed; inset:0; z-index:50; background:#000; display:grid; grid-template-rows:auto 1fr auto}
+#trailer[hidden]{display:none}
+#trailer .lb{height:11vh; background:#000; position:relative; z-index:2}
+#tcanvas{position:absolute; inset:0; width:100%; height:100%}
+#tstage{position:relative; display:grid; place-items:center; text-align:center; overflow:hidden;
+  padding-left:max(16px, env(safe-area-inset-left,0px)); padding-right:max(16px, env(safe-area-inset-right,0px))}
+#tcard{position:relative; z-index:1; display:grid; gap:14px; justify-items:center; max-width:900px}
+#tcard .k{font-family:var(--f-mono); font-size:var(--s-0); letter-spacing:.4em; color:var(--gold); text-transform:uppercase}
+#tcard .tt{font-family:var(--f-telugu-display); font-size:clamp(2rem,6.5vw,4.4rem); line-height:1.25; color:#fff; text-shadow:0 0 30px #000}
+#tcard .te{font-family:var(--f-display); letter-spacing:.14em; font-size:clamp(.95rem,2.2vw,1.35rem); color:var(--paper); text-wrap:balance}
+#tcard.play .k{animation:fadeUp 1s .1s both}
+#tcard.play .tt{animation:punch 1.6s .25s cubic-bezier(.15,.8,.1,1) both}
+#tcard.play .te{animation:fadeUp 1.4s .9s both}
+@keyframes punch{from{opacity:0; transform:scale(1.35); filter:blur(14px)}to{opacity:1; transform:none; filter:none}}
+@keyframes fadeUp{from{opacity:0; transform:translateY(14px)}to{opacity:1; transform:none}}
+#tflash{position:absolute; inset:0; background:#fff; opacity:0; pointer-events:none; z-index:2}
+#tflash.go{animation:flash .7s ease-out}
+@keyframes flash{0%{opacity:.85}100%{opacity:0}}
+.tctrl{position:absolute; z-index:3; display:flex; gap:8px; right:max(12px, calc(env(safe-area-inset-right,0px) + 12px)); top:12px}
+.tctrl button{font-family:var(--f-mono); font-size:.7rem; letter-spacing:.14em; text-transform:uppercase; padding:8px 12px; background:#111; color:var(--paper); border:1px solid #ffffff33}
+#tprog{position:absolute; left:0; bottom:0; height:2px; background:var(--gold); width:0; z-index:3}
+
+@media (prefers-reduced-motion: reduce){
+  .grain,.tel-title,.en-title,.wheel .ring{animation:none!important}
+  .rv{transition:none} .rv.pre{transform:none; filter:none}
+  #tcard.play *{animation:none!important}
+}
+</style>
+
+<canvas id="vfx" aria-hidden="true"></canvas>
+<div class="vignette" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+
+<main>
+  <!-- ================= TITLE CARD ================= -->
+  <header class="hero" data-grade="hero">
+    <div class="bar"></div>
+    <div class="wrap hero-in">
+      <div class="presents">శ్రీమద్ భగవద్గీత · Adhyāya 03 · 43 Ślokas</div>
+      <h1 class="tel-title">కర్మ యోగము</h1>
+      <p class="en-title">KARMA YOGAM</p>
+      <div class="tag">The Yoga of Action</div>
+      <p class="logline">A warrior wants to drop his bow and walk away. His charioteer has one night of lines to convince him that running from work is not peace. It is just another kind of bondage.</p>
+      <div class="cta">
+        <button class="btn" id="playTrailer" type="button">▶ ట్రైలర్ · Play Trailer</button>
+        <a class="btn ghost" href="#scene-1">Start the Film ↓</a>
+      </div>
+      <div class="credits">
+        <span>HERO <b>Arjuna</b></span>
+        <span>GUIDE <b>Sri Krishna</b></span>
+        <span>VILLAIN <b>Kāma (Desire)</b></span>
+        <span>LOCATION <b>Kurukshetra</b></span>
+        <span>RUNTIME <b>3.1 – 3.43</b></span>
+      </div>
+    </div>
+    <div class="bar"></div>
+    <nav class="wrap reel" aria-label="Scenes">
+      <a class="chip" href="#scene-1"><i style="background:#3fa3a8"></i>1 · సందేహం</a>
+      <a class="chip" href="#scene-2"><i style="background:#8fbf5a"></i>2 · యజ్ఞ చక్రం</a>
+      <a class="chip" href="#scene-3"><i style="background:#f0b64a"></i>3 · నాయకుడు</a>
+      <a class="chip" href="#scene-4"><i style="background:#9f7cff"></i>4 · గుణాలు</a>
+      <a class="chip" href="#scene-5"><i style="background:#ff4b2b"></i>5 · లోపలి శత్రువు</a>
+      <a class="chip" href="#finale"><i style="background:#fff1c4"></i>శుభం</a>
+    </nav>
+  </header>
+
+  <!-- ================= SCENE 1 ================= -->
+  <section class="scene wrap" id="scene-1" data-grade="doubt" style="--accent:#5cc3c8">
+    <div class="slate rv"><span class="no">Scene 01</span><span>EXT. Kurukshetra · Pre-dawn</span><span>Ślokas 3.1 – 3.8</span></div>
+    <h2 class="rv"><span class="t">సందేహపు ఉదయం</span><span class="e">The Dawn of Doubt</span></h2>
+    <p class="premise rv">In Chapter 2 Krishna praised wisdom above action. Arjuna grabs that line like an exit door: "If knowledge is higher, why push me into this terrible work?"</p>
+
+    <div class="grid">
+      <aside class="sheet rv">
+        <h3>Shot Sheet</h3>
+        <dl class="shot">
+          <dt>Camera</dt><dd>Extreme wide drone shot of two armies frozen in fog. Slow push-in to one chariot. Cut to a tight close-up: Arjuna's fingers loosening on the Gāṇḍīva.</dd>
+          <dt>VFX</dt><dd>Volumetric morning fog, floating dust motes in god-rays. Time-freeze: arrows hang mid-air while only Krishna and Arjuna move.</dd>
+          <dt>Grade</dt><dd>Cold teal, lifted shadows, low saturation. The world looks drained, the way doubt feels.</dd>
+          <dt>BGM</dt><dd>A single veena string, then silence. A conch far away.</dd>
+        </dl>
+        <div class="lutwrap"><div class="lut"><span style="background:#0b1a20" data-hex="#0B1A20"></span><span style="background:#24505a" data-hex="#24505A"></span><span style="background:#5cc3c8" data-hex="#5CC3C8"></span><span style="background:#c9a77a" data-hex="#C9A77A"></span></div></div>
+        <div class="versemap"><span>3.1</span><span>3.2</span><span>3.3</span><span>3.4</span><span class="key">3.5</span><span>3.6</span><span>3.7</span><span class="key">3.8</span></div>
+      </aside>
+
+      <div class="panel rv">
+        <p class="shloka" lang="sa">न हि कश्चित्क्षणमपि जातु तिष्ठत्यकर्मकृत् ।<br>कार्यते ह्यवशः कर्म सर्वः प्रकृतिजैर्गुणैः ॥<small>BG 3.5</small></p>
+        <p class="trans">No one can stay without acting, not even for a moment. Everyone is driven to act, helplessly, by the qualities born of nature.</p>
+        <blockquote class="dialogue">
+          <span class="who">Krishna · close-up, low angle</span>
+          <span class="tel" lang="te">అర్జునా... కర్మ చేయకుండా ఎవ్వరూ ఒక్క క్షణం కూడా ఉండలేరు.</span>
+          <span class="en">"Arjuna. Not one being can stay still for even a moment."</span>
+        </blockquote>
+        <p class="shloka" lang="sa">नियतं कुरु कर्म त्वं कर्म ज्यायो ह्यकर्मणः ।<br>शरीरयात्रापि च ते न प्रसिद्ध्येदकर्मणः ॥<small>BG 3.8</small></p>
+        <blockquote class="dialogue">
+          <span class="who">Krishna · the punch line</span>
+          <span class="tel" lang="te">నీ కర్తవ్యం నువ్వు చెయ్యి. కర్మ చేయకపోవడం కంటే చేయడమే శ్రేష్ఠం.</span>
+          <span class="en">"Do your duty. Action is greater than inaction. Without it, you cannot even keep your body alive."</span>
+        </blockquote>
+      </div>
+    </div>
+
+    <div class="duo">
+      <article class="rv">
+        <span class="kicker">The true meaning</span>
+        <h4>Quitting is also an action</h4>
+        <ul>
+          <li><em>Two paths, one destination (3.3).</em> Knowledge and action are not rivals. One is for the contemplative, one for the doer, and both need a pure mind.</li>
+          <li><em>You can't escape karma by stopping (3.4).</em> Sitting idle doesn't free you. Freedom comes from <em>how</em> you act, not from not acting.</li>
+          <li><em>The fake renunciate (3.6).</em> Krishna calls the man who shuts his eyes and still dwells on sense objects a <em>mithyācāra</em>, a pretender. The body sits; the mind is still at the party.</li>
+          <li><em>The real yogi (3.7).</em> Mind holds the senses steady while the hands keep working, without clinging to results.</li>
+        </ul>
+      </article>
+      <article class="rv reallife">
+        <span class="kicker">Real time · Hyderabad, 2026</span>
+        <h4>Ravi wants to resign before the launch</h4>
+        <p>Ravi is a tech lead at a Gachibowli startup. Two weeks before release he says, "This rat race is meaningless. I'll quit and find peace." He goes home, and spends six hours a day scrolling his ex-colleagues' LinkedIn posts.</p>
+        <p>That is 3.6 in a hoodie. His body left the job; his mind didn't. Krishna's answer is not "never quit". It is: <em>don't use spirituality as an escape hatch from responsibility you are actually built for.</em> Finish the work. Then choose with a clear head.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ================= SCENE 2 ================= -->
+  <section class="scene wrap" id="scene-2" data-grade="wheel" style="--accent:#a6d06a">
+    <div class="slate rv"><span class="no">Scene 02</span><span>Flashback · The dawn of creation</span><span>Ślokas 3.9 – 3.16</span></div>
+    <h2 class="rv"><span class="t">యజ్ఞ చక్రం</span><span class="e">The Wheel of Yajña</span></h2>
+    <p class="premise rv">Krishna pulls the camera out to cosmic scale. Every action either binds you or frees you, and the difference is one word: <em>yajña</em>, work offered for something larger than yourself.</p>
+
+    <div class="grid">
+      <aside class="sheet rv">
+        <h3>Shot Sheet</h3>
+        <dl class="shot">
+          <dt>Camera</dt><dd>Match cut from Krishna's eye to a spinning galaxy. One continuous crane shot: clouds, rain on paddy fields in Godavari delta, a mother serving rice, a priest at the fire, back up to the clouds.</dd>
+          <dt>VFX</dt><dd>Monsoon rain particles that become grains of rice as they land. A golden ring of light connects every shot into one turning wheel.</dd>
+          <dt>Grade</dt><dd>Monsoon green with warm gold highlights. Saturation rises as the cycle completes.</dd>
+          <dt>BGM</dt><dd>Mridangam pattern in a 7-beat loop, each cycle adding an instrument.</dd>
+        </dl>
+        <div class="lutwrap"><div class="lut"><span style="background:#0e1a0c" data-hex="#0E1A0C"></span><span style="background:#2f5a2a" data-hex="#2F5A2A"></span><span style="background:#a6d06a" data-hex="#A6D06A"></span><span style="background:#f2c94c" data-hex="#F2C94C"></span></div></div>
+        <svg class="wheel" viewBox="0 0 360 360" role="img" aria-label="The cycle of 3.14: action leads to yajña, yajña to rain, rain to food, food to living beings, beings to action">
+          <circle class="ring" cx="180" cy="180" r="120"></circle>
+          <g>
+            <circle class="node" cx="180" cy="60" r="34"></circle><text x="180" y="60" text-anchor="middle">కర్మ</text><text class="en" x="180" y="76" text-anchor="middle">ACTION</text>
+            <circle class="node" cx="294" cy="143" r="34"></circle><text x="294" y="143" text-anchor="middle">యజ్ఞం</text><text class="en" x="294" y="159" text-anchor="middle">OFFERING</text>
+            <circle class="node" cx="251" cy="277" r="34"></circle><text x="251" y="277" text-anchor="middle">వర్షం</text><text class="en" x="251" y="293" text-anchor="middle">RAIN</text>
+            <circle class="node" cx="109" cy="277" r="34"></circle><text x="109" y="277" text-anchor="middle">అన్నం</text><text class="en" x="109" y="293" text-anchor="middle">FOOD</text>
+            <circle class="node" cx="66" cy="143" r="34"></circle><text x="66" y="143" text-anchor="middle">జీవులు</text><text class="en" x="66" y="159" text-anchor="middle">BEINGS</text>
+          </g>
+        </svg>
+        <div class="versemap"><span class="key">3.9</span><span>3.10</span><span>3.11</span><span class="key">3.12</span><span>3.13</span><span class="key">3.14</span><span>3.15</span><span>3.16</span></div>
+      </aside>
+
+      <div class="panel rv">
+        <p class="shloka" lang="sa">यज्ञार्थात्कर्मणोऽन्यत्र लोकोऽयं कर्मबन्धनः ।<br>तदर्थं कर्म कौन्तेय मुक्तसङ्गः समाचर ॥<small>BG 3.9</small></p>
+        <p class="trans">Work not done as an offering binds this world. So, son of Kuntī, act for that purpose, free from attachment.</p>
+        <blockquote class="dialogue">
+          <span class="who">Krishna · voice-over across the montage</span>
+          <span class="tel" lang="te">ఇచ్చి పుచ్చుకోవడమే సృష్టి చక్రం. తీసుకుని తిరిగి ఇవ్వనివాడు దొంగ.</span>
+          <span class="en">"Giving and receiving is the wheel of creation. One who takes and never gives back is a thief." (3.12)</span>
+        </blockquote>
+        <p class="shloka" lang="sa">अन्नाद्भवन्ति भूतानि पर्जन्यादन्नसम्भवः ।<br>यज्ञाद्भवति पर्जन्यो यज्ञः कर्मसमुद्भवः ॥<small>BG 3.14</small></p>
+        <p class="trans">Beings come from food, food from rain, rain from yajña, and yajña is born of action.</p>
+      </div>
+    </div>
+
+    <div class="duo">
+      <article class="rv">
+        <span class="kicker">The true meaning</span>
+        <h4>Nothing in nature works for itself</h4>
+        <ul>
+          <li><em>Yajña is not only fire rituals.</em> It is the principle that every gift you receive (air, rain, food, language, safety) came from someone else's work, and your work should flow back into the circle.</li>
+          <li><em>3.13: "Those who cook only for themselves eat sin."</em> Selfish action doesn't just hurt others; it isolates you and binds you tighter.</li>
+          <li><em>3.16: one who doesn't turn the wheel "lives in vain".</em> A life of pure consumption is spiritually a dead end, however comfortable.</li>
+        </ul>
+      </article>
+      <article class="rv reallife">
+        <span class="kicker">Real time · your own day</span>
+        <h4>Who fed you this morning?</h4>
+        <p>A farmer in Guntur grew the rice. A truck driver drove through the night. A delivery partner rode in the rain. Your mother woke at 5. The engineer who maintains the power grid never met you.</p>
+        <p>You are already living inside the wheel. 3.12's "thief" is the person who enjoys all of this and asks, "What's in it for me?" every time they're asked to contribute: the free-rider in the group project, the employee who takes credit and never mentors anyone. <em>Pay your taxes to the universe: do your work well, and do some of it for others.</em></p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ================= SCENE 3 ================= -->
+  <section class="scene wrap" id="scene-3" data-grade="leader" style="--accent:#f0b64a">
+    <div class="slate rv"><span class="no">Scene 03</span><span>EXT. Battlefield · Golden hour</span><span>Ślokas 3.17 – 3.26</span></div>
+    <h2 class="rv"><span class="t">నాయకుడు</span><span class="e">The One Others Follow</span></h2>
+    <p class="premise rv">The mass moment. Krishna reveals that even he, who needs nothing in the three worlds, never stops working. If he did, the whole world would copy him and collapse.</p>
+
+    <div class="grid">
+      <aside class="sheet rv">
+        <h3>Shot Sheet</h3>
+        <dl class="shot">
+          <dt>Camera</dt><dd>Slow-motion 120fps hero walk. Krishna steps down from the chariot, dust rising around his feet. 360° orbit shot as he speaks. Crowd of soldiers lowering their weapons to listen.</dd>
+          <dt>VFX</dt><dd>Sun flare breaking over his shoulder. Golden sparks rising from the earth. Flash-cuts of King Janaka ruling a kingdom while sitting in perfect calm (3.20).</dd>
+          <dt>Grade</dt><dd>Full teal-and-orange "mass" grade. Skin tones pushed to warm gold, sky deep teal, highlights bloomed.</dd>
+          <dt>BGM</dt><dd>Full orchestra plus chorus chanting "yad yad ācarati". Drums hit on every cut.</dd>
+        </dl>
+        <div class="lutwrap"><div class="lut"><span style="background:#1a0f05" data-hex="#1A0F05"></span><span style="background:#1f5560" data-hex="#1F5560"></span><span style="background:#c9781f" data-hex="#C9781F"></span><span style="background:#ffd98a" data-hex="#FFD98A"></span></div></div>
+        <div class="versemap"><span>3.17</span><span>3.18</span><span class="key">3.19</span><span>3.20</span><span class="key">3.21</span><span>3.22</span><span>3.23</span><span>3.24</span><span>3.25</span><span>3.26</span></div>
+      </aside>
+
+      <div class="panel rv">
+        <p class="shloka" lang="sa">यद्यदाचरति श्रेष्ठस्तत्तदेवेतरो जनः ।<br>स यत्प्रमाणं कुरुते लोकस्तदनुवर्तते ॥<small>BG 3.21</small></p>
+        <p class="trans">Whatever a great person does, others do the same. Whatever standard they set, the world follows.</p>
+        <blockquote class="dialogue">
+          <span class="who">Krishna · orbit shot, music swells</span>
+          <span class="tel" lang="te">శ్రేష్ఠుడు ఏది ఆచరిస్తాడో... లోకం అదే అనుసరిస్తుంది.</span>
+          <span class="en">"Whatever the great one does, the world will follow."</span>
+        </blockquote>
+        <p class="shloka" lang="sa">तस्मादसक्तः सततं कार्यं कर्म समाचर ।<br>असक्तो ह्याचरन्कर्म परमाप्नोति पूरुषः ॥<small>BG 3.19</small></p>
+        <blockquote class="dialogue">
+          <span class="who">Krishna · quieter, to Arjuna alone</span>
+          <span class="tel" lang="te">మూడు లోకాల్లో నాకు చేయవలసింది ఏదీ లేదు. అయినా నేను కర్మ చేస్తూనే ఉంటాను.</span>
+          <span class="en">"There is nothing in the three worlds I must do. Yet I keep working." (3.22)</span>
+        </blockquote>
+      </div>
+    </div>
+
+    <div class="duo">
+      <article class="rv">
+        <span class="kicker">The true meaning</span>
+        <h4>Lokasaṅgraha: work that holds the world together</h4>
+        <ul>
+          <li><em>3.19</em> gives the formula: do what must be done, <em>continuously</em>, without attachment. That is how one reaches the highest.</li>
+          <li><em>3.20</em> uses King Janaka as proof that you can be fully enlightened and fully employed at the same time.</li>
+          <li><em>3.25</em>: the ignorant work hard out of attachment. The wise should work <em>just as hard</em>, but for the welfare of the world.</li>
+          <li><em>3.26</em>: don't confuse people who are attached to work by preaching renunciation at them. Inspire them by example instead.</li>
+        </ul>
+      </article>
+      <article class="rv reallife">
+        <span class="kicker">Real time · home and office</span>
+        <h4>Your children are watching, not listening</h4>
+        <p>A father tells his son, "Stop using your phone at dinner," while checking cricket scores under the table. The son learns the phone, not the sentence.</p>
+        <p>A team lead who leaves at 5 and tells everyone to "own the outcome" gets a team that leaves at 5. A captain who dives for the ball in the last over gets ten players diving with him. <em>Every one of us is a śreṣṭha to someone: a younger sibling, a junior, a follower.</em> Your behaviour is the only sermon that works.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ================= INTERVAL ================= -->
+  <section class="wrap card" data-grade="interval" aria-label="Interval">
+    <div class="big" lang="te">విరామం</div>
+    <div class="sub">Interval</div>
+    <p>Arjuna is convinced he must act. One question remains: if everyone knows what is right, why do we keep doing what is wrong? The second half answers it.</p>
+  </section>
+
+  <!-- ================= SCENE 4 ================= -->
+  <section class="scene wrap" id="scene-4" data-grade="guna" style="--accent:#b49bff">
+    <div class="slate rv"><span class="no">Scene 04</span><span>INT. The mind · Surreal</span><span>Ślokas 3.27 – 3.35</span></div>
+    <h2 class="rv"><span class="t">గుణాల యంత్రం</span><span class="e">The Machine of the Guṇas</span></h2>
+    <p class="premise rv">The film goes inside the head. Krishna shows Arjuna the gears that actually move every hand and every thought, and the ego that takes credit for all of it.</p>
+
+    <div class="grid">
+      <aside class="sheet rv">
+        <h3>Shot Sheet</h3>
+        <dl class="shot">
+          <dt>Camera</dt><dd>Push into Arjuna's iris. Inside, a vast cathedral of turning gears. A tiny figure labelled "I" stands on top shouting "I did it!" while the machine runs on its own.</dd>
+          <dt>VFX</dt><dd>Three streams of light (white sattva, red rajas, indigo tamas) orbiting and weaving every action. Mirror split-screen: Arjuna in his warrior armour vs. Arjuna in a monk's robe.</dd>
+          <dt>Grade</dt><dd>Split-tone: violet shadows, cyan midtones, white highlights. Deliberately unreal.</dd>
+          <dt>BGM</dt><dd>Synth pads under a tanpura drone. Clockwork ticks on the off-beat.</dd>
+        </dl>
+        <div class="lutwrap"><div class="lut"><span style="background:#120c24" data-hex="#120C24"></span><span style="background:#3b2a7a" data-hex="#3B2A7A"></span><span style="background:#b49bff" data-hex="#B49BFF"></span><span style="background:#e8f7ff" data-hex="#E8F7FF"></span></div></div>
+        <div class="triad" lang="te">
+          <div style="border-color:#e8f7ff66"><b>సత్త్వ</b>Clarity, calm, light. Wants to know.</div>
+          <div style="border-color:#ff4b4b66"><b>రజస్</b>Passion, drive, restlessness. Wants to get.</div>
+          <div style="border-color:#6a5cff66"><b>తమస్</b>Inertia, confusion, sleep. Wants to avoid.</div>
+        </div>
+        <div class="versemap"><span class="key">3.27</span><span>3.28</span><span>3.29</span><span class="key">3.30</span><span>3.31</span><span>3.32</span><span>3.33</span><span>3.34</span><span class="key">3.35</span></div>
+      </aside>
+
+      <div class="panel rv">
+        <p class="shloka" lang="sa">प्रकृतेः क्रियमाणानि गुणैः कर्माणि सर्वशः ।<br>अहङ्कारविमूढात्मा कर्ताहमिति मन्यते ॥<small>BG 3.27</small></p>
+        <p class="trans">All actions are performed by the guṇas of nature. The one deluded by ego thinks, "I am the doer."</p>
+        <blockquote class="dialogue">
+          <span class="who">Krishna · echoing inside the machine</span>
+          <span class="tel" lang="te">చేసేది ప్రకృతి... "నేనే చేశాను" అనుకునేది అహంకారం.</span>
+          <span class="en">"Nature does the work. The ego only takes the credit."</span>
+        </blockquote>
+        <p class="shloka" lang="sa">मयि सर्वाणि कर्माणि संन्यस्याध्यात्मचेतसा ।<br>निराशीर्निर्ममो भूत्वा युध्यस्व विगतज्वरः ॥<small>BG 3.30</small></p>
+        <p class="trans">Offer all actions to me, mind fixed on the Self. Free of craving, free of "mine", fight, with the fever gone.</p>
+        <p class="shloka" lang="sa">श्रेयान्स्वधर्मो विगुणः परधर्मात्स्वनुष्ठितात् ।<br>स्वधर्मे निधनं श्रेयः परधर्मो भयावहः ॥<small>BG 3.35</small></p>
+        <blockquote class="dialogue">
+          <span class="who">Krishna · mirror shot shatters</span>
+          <span class="tel" lang="te">ఇతరుల ధర్మం ఎంత బాగా చేసినా, లోపాలున్నా నీ స్వధర్మమే నీకు శ్రేయస్సు.</span>
+          <span class="en">"Better your own path done imperfectly than another's done perfectly. Another's path is full of fear."</span>
+        </blockquote>
+      </div>
+    </div>
+
+    <div class="duo">
+      <article class="rv">
+        <span class="kicker">The true meaning</span>
+        <h4>Drop the doer, keep the doing</h4>
+        <ul>
+          <li><em>3.27–28.</em> Your talent, your energy, your health, your timing: none of these did you create. The wise see "guṇas acting on guṇas" and stay unattached.</li>
+          <li><em>3.30 "vigata-jvaraḥ", without fever.</em> The fever is anxiety about results. Offer the work upward and the hands become steady.</li>
+          <li><em>3.33–34.</em> Nature will push you. Don't fight it with repression. Just don't come under the rule of <em>rāga</em> (craving) and <em>dveṣa</em> (aversion), the two highway robbers on your path.</li>
+          <li><em>3.35 svadharma.</em> Your own duty, fitted to your nature and your situation, beats a borrowed one.</li>
+        </ul>
+      </article>
+      <article class="rv reallife">
+        <span class="kicker">Real time · Instagram age</span>
+        <h4>The neighbour's son took CSE, so...</h4>
+        <p>Priya loves teaching and is brilliant with children. Everyone around her chose software, so she did too. She is competent and miserable, and every appraisal feels like a verdict on her worth. That is <em>para-dharma bhayāvahaḥ</em>: a borrowed path runs on fear.</p>
+        <p>And when her project wins an award, the voice says "I did it". When it fails, the same voice says "I am a failure". 3.27 cuts both: <em>you are the instrument, not the owner.</em> Success doesn't inflate you, failure doesn't crush you. That is the fever breaking.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ================= SCENE 5 ================= -->
+  <section class="scene wrap" id="scene-5" data-grade="fire" style="--accent:#ff6a3d">
+    <div class="slate rv"><span class="no">Scene 05 · Climax</span><span>EXT. Battlefield · Night, burning</span><span>Ślokas 3.36 – 3.43</span></div>
+    <h2 class="rv"><span class="t">లోపలి శత్రువు</span><span class="e">The Enemy Within</span></h2>
+    <p class="premise rv">Arjuna asks the question every human asks: "Then what forces a person to do wrong, even against his own will, as if dragged by force?" (3.36). Krishna finally names the villain.</p>
+
+    <div class="grid">
+      <aside class="sheet rv">
+        <h3>Shot Sheet</h3>
+        <dl class="shot">
+          <dt>Camera</dt><dd>Villain reveal: the camera whips around to show the enemy is not across the field. It is Arjuna's own shadow, rising behind him as a fire-demon. Handheld, shaky, tight.</dd>
+          <dt>VFX</dt><dd>Fire that grows the more it is fed (3.39). Three-part transition: flame swallowed by smoke, a mirror fogging with dust, a seed in the womb. Then a slow-mo arrow of light from Arjuna's chest splitting the demon.</dd>
+          <dt>Grade</dt><dd>Blood-orange and black. Crushed shadows, glowing embers. It cools to clean gold on the final verse.</dd>
+          <dt>BGM</dt><dd>Taiko and nadaswaram war cry. Total silence for one beat before "jahi śatrum". Then everything at once.</dd>
+        </dl>
+        <div class="lutwrap"><div class="lut"><span style="background:#120302" data-hex="#120302"></span><span style="background:#6e140c" data-hex="#6E140C"></span><span style="background:#ff6a3d" data-hex="#FF6A3D"></span><span style="background:#ffd27a" data-hex="#FFD27A"></span></div></div>
+        <div class="versemap"><span>3.36</span><span class="key">3.37</span><span class="key">3.38</span><span>3.39</span><span>3.40</span><span>3.41</span><span class="key">3.42</span><span class="key">3.43</span></div>
+      </aside>
+
+      <div class="panel rv">
+        <p class="shloka" lang="sa">काम एष क्रोध एष रजोगुणसमुद्भवः ।<br>महाशनो महापाप्मा विद्ध्येनमिह वैरिणम् ॥<small>BG 3.37</small></p>
+        <p class="trans">It is desire. It is anger. Born of rajas, all-devouring, the great sinner. Know this to be the enemy here.</p>
+        <blockquote class="dialogue">
+          <span class="who">Krishna · villain reveal</span>
+          <span class="tel" lang="te">నీ శత్రువు బయట లేడు అర్జునా... నీ లోపలే ఉన్నాడు. వాడి పేరు కామం. వాడి రూపం క్రోధం.</span>
+          <span class="en">"Your enemy is not out there, Arjuna. He is inside you. His name is desire. His face is anger."</span>
+        </blockquote>
+        <p class="shloka" lang="sa">एवं बुद्धेः परं बुद्ध्वा संस्तभ्यात्मानमात्मना ।<br>जहि शत्रुं महाबाहो कामरूपं दुरासदम् ॥<small>BG 3.43</small></p>
+        <blockquote class="dialogue">
+          <span class="who">Krishna · the final punch · silence, then drums</span>
+          <span class="tel" lang="te">బుద్ధి కంటే పైనున్న ఆత్మను తెలుసుకో. నిన్ను నువ్వే నిలబెట్టుకో. ఆ శత్రువును జయించు, మహాబాహో!</span>
+          <span class="en">"Know the Self beyond the intellect. Steady yourself by yourself. Now slay this enemy, mighty-armed one!"</span>
+        </blockquote>
+      </div>
+    </div>
+
+    <div class="duo">
+      <article class="rv">
+        <span class="kicker">3.38 · Three layers of smoke</span>
+        <h4>How desire hides the truth</h4>
+        <div class="covers">
+          <div><span class="lvl">Light cover</span><b>Fire in smoke</b>A puff of wind clears it. A good mind, briefly clouded.</div>
+          <div><span class="lvl">Medium cover</span><b>Dust on a mirror</b>Needs deliberate wiping. Habit and effort.</div>
+          <div><span class="lvl">Deep cover</span><b>Child in the womb</b>Only time and patience reveal it. Deep-rooted craving.</div>
+        </div>
+        <p>3.39 calls desire <em>duṣpūreṇa analena</em>, "a fire that can never be filled". Every log you feed it makes it bigger, not smaller.</p>
+      </article>
+      <article class="rv">
+        <span class="kicker">3.40 – 3.42 · The battle map</span>
+        <h4>Where the enemy hides, and where you stand</h4>
+        <div class="ladder" lang="te">
+          <div><b>ఆత్మ</b><span>The Self (saḥ): beyond all. Stand here.</span></div>
+          <div><b>బుద్ధి</b><span>Intellect: higher than the mind.</span></div>
+          <div><b>మనస్సు</b><span>Mind: higher than the senses.</span></div>
+          <div><b>ఇంద్రియాలు</b><span>Senses: where desire enters first (3.41).</span></div>
+        </div>
+        <p>Desire camps in the senses, mind and intellect (3.40). So 3.41 says: guard the senses first. 3.43 says: then rule all of it from the top, from the Self.</p>
+      </article>
+    </div>
+    <div class="duo">
+      <article class="rv reallife" style="grid-column:1/-1">
+        <span class="kicker">Real time · 11:47 PM, one more reel</span>
+        <h4>Kāma becomes krodha in about three seconds</h4>
+        <p>You want to sleep at 11. A notification lights up. Twenty minutes become two hours (the senses). You know it's bad for you (the intellect), but the mind keeps arguing "just one more". When the Wi-Fi drops, you're furious. <em>That anger is just desire that got blocked.</em> It's 3.37 in a dark bedroom.</p>
+        <p>The same chain runs road rage on the ORR, the fight over a property share, the bitterness when a colleague gets promoted. Krishna's strategy is practical: <em>first guard the entry points</em> (phone outside the bedroom, unfollow what feeds the fire), <em>then train the mind</em>, and finally <em>stand in the Self</em>, the part of you that watches the craving without becoming it. From there the "invincible" enemy is beatable.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ================= FINALE ================= -->
+  <section class="wrap card" id="finale" data-grade="finale" aria-label="Finale">
+    <div class="sub">The Takeaway Reel</div>
+    <div class="take">
+      <div><span class="v">3.5 · 3.8</span><b lang="te">పని నుంచి పారిపోలేవు</b><span>You can't escape action. So choose to act well.</span></div>
+      <div><span class="v">3.9 · 3.12</span><b lang="te">పనిని యజ్ఞంగా చెయ్యి</b><span>Work as an offering frees you. Taking without giving makes you a thief.</span></div>
+      <div><span class="v">3.21</span><b lang="te">నువ్వే ఒక ఉదాహరణ</b><span>Someone is copying you. Live the standard you preach.</span></div>
+      <div><span class="v">3.27 · 3.30</span><b lang="te">కర్తృత్వం వదులు</b><span>You are the instrument. Drop "I did it" and the anxiety breaks.</span></div>
+      <div><span class="v">3.35</span><b lang="te">స్వధర్మమే శ్రేయస్సు</b><span>Your own path, imperfect, beats a copied one.</span></div>
+      <div><span class="v">3.37 · 3.43</span><b lang="te">లోపలి శత్రువును జయించు</b><span>Desire turns to anger. Guard the senses, steady the mind, stand in the Self.</span></div>
+    </div>
+    <div class="big" lang="te" style="margin-top:50px">శుభం</div>
+    <p>ఇతి శ్రీమద్భగవద్గీతాసు ... కర్మయోగో నామ తృతీయోఽధ్యాయః</p>
+  </section>
+
+  <footer class="wrap">
+    Explanation and screenplay treatment of Bhagavad Gītā, Chapter 3 (Karma Yoga). Sanskrit verses quoted from the traditional text.<br>
+    Real-life examples are illustrative stories, not real people.
+  </footer>
+</main>
+
+<button class="scriptbtn" id="scriptToggle" type="button" aria-pressed="false">Ślokas: <b>Telugu</b> / Devanāgarī</button>
+
+<!-- ================= TRAILER ================= -->
+<div id="trailer" hidden role="dialog" aria-modal="true" aria-label="Karma Yogam trailer">
+  <div class="lb"></div>
+  <div id="tstage">
+    <canvas id="tcanvas" aria-hidden="true"></canvas>
+    <div id="tcard"><div class="k"></div><div class="tt" lang="te"></div><div class="te"></div></div>
+    <div id="tflash"></div>
+    <div class="tctrl">
+      <button type="button" id="tsound" aria-pressed="false">Sound off</button>
+      <button type="button" id="tclose">Close ✕</button>
+    </div>
+    <div id="tprog"></div>
+  </div>
+  <div class="lb"></div>
+</div>
+
+<script>
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- Grades: palette + particle mode per scene ---------- */
+  const GRADES = {
+    hero:     {g1:'#e9b44c', g2:'#3fa3a8', g3:'#10161c', mode:'embers'},
+    doubt:    {g1:'#5cc3c8', g2:'#c9a77a', g3:'#0b1a20', mode:'dust'},
+    wheel:    {g1:'#a6d06a', g2:'#f2c94c', g3:'#0e1a0c', mode:'rain'},
+    leader:   {g1:'#ffd98a', g2:'#c9781f', g3:'#1f1305', mode:'rise'},
+    interval: {g1:'#e9b44c', g2:'#ffffff', g3:'#0a0a0a', mode:'dust'},
+    guna:     {g1:'#e8f7ff', g2:'#ff4b4b', g3:'#120c24', mode:'guna', g4:'#6a5cff'},
+    fire:     {g1:'#ff6a3d', g2:'#ffd27a', g3:'#1e0503', mode:'fire'},
+    finale:   {g1:'#fff1c4', g2:'#e9b44c', g3:'#17120a', mode:'rise'}
+  };
+  const root = document.documentElement;
+  let grade = GRADES.hero;
+
+  function hexToRgb(h){const n=parseInt(h.slice(1),16);return [n>>16&255,n>>8&255,n&255]}
+
+  /* ---------- Particle engine (shared by page and trailer) ---------- */
+  function Engine(canvas){
+    const ctx = canvas.getContext('2d');
+    let W=0,H=0,dpr=1, parts=[], mode='embers', cols=[[233,180,76]], t=0;
+    function resize(){
+      dpr=Math.min(2,window.devicePixelRatio||1);
+      W=canvas.clientWidth; H=canvas.clientHeight;
+      canvas.width=W*dpr; canvas.height=H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
+    }
+    function spawn(init){
+      const c = cols[(Math.random()*cols.length)|0];
+      const p = {x:Math.random()*W, y:init?Math.random()*H:H+10, c, life:Math.random(), a:Math.random()*Math.PI*2};
+      switch(mode){
+        case 'rain': p.y=init?Math.random()*H:-20; p.vx=-.6; p.vy=6+Math.random()*6; p.r=1; p.len=10+Math.random()*14; break;
+        case 'dust': p.vx=(Math.random()-.5)*.25; p.vy=-.05-Math.random()*.2; p.r=.6+Math.random()*1.8; break;
+        case 'fire': p.vx=(Math.random()-.5)*1.4; p.vy=-1.5-Math.random()*3.5; p.r=.8+Math.random()*2.6; break;
+        case 'guna': p.orb=60+Math.random()*Math.min(W,H)*.45; p.sp=(.002+Math.random()*.004)*(Math.random()<.5?1:-1); p.r=.8+Math.random()*1.8; break;
+        default: p.vx=(Math.random()-.5)*.6; p.vy=-.4-Math.random()*1.2; p.r=.7+Math.random()*2.2;
+      }
+      return p;
+    }
+    function count(){ const base = Math.min(220, Math.round(W*H/7000)); return reduce?Math.round(base*.35): mode==='rain'?base*1.3|0 : mode==='fire'?base*1.4|0 : base; }
+    function setMode(m, colours){ mode=m; cols=colours.map(hexToRgb); parts=Array.from({length:count()},()=>spawn(true)); }
+    function frame(){
+      t++;
+      ctx.clearRect(0,0,W,H);
+      ctx.globalCompositeOperation='lighter';
+      for(let i=0;i<parts.length;i++){
+        const p=parts[i]; const [r,g,b]=p.c;
+        if(mode==='guna'){
+          p.a+=p.sp; const cx=W/2, cy=H/2;
+          p.x=cx+Math.cos(p.a)*p.orb; p.y=cy+Math.sin(p.a*1.3)*p.orb*.55;
+        } else { p.x+=p.vx+(mode==='fire'?Math.sin((t+i)*.05)*.5:0); p.y+=p.vy; }
+        p.life+=.004;
+        const fl = .35+.65*Math.abs(Math.sin(p.life*6+i));
+        if(mode==='rain'){
+          ctx.strokeStyle=`rgba(${r},${g},${b},${.25*fl})`; ctx.lineWidth=1;
+          ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(p.x+p.vx*2,p.y-p.len); ctx.stroke();
+        } else {
+          const rad=p.r*(mode==='fire'?3.2:2.6);
+          const grd=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,rad);
+          grd.addColorStop(0,`rgba(${r},${g},${b},${.75*fl})`); grd.addColorStop(1,`rgba(${r},${g},${b},0)`);
+          ctx.fillStyle=grd; ctx.beginPath(); ctx.arc(p.x,p.y,rad,0,Math.PI*2); ctx.fill();
+        }
+        if(p.y<-30||p.y>H+30||p.x<-40||p.x>W+40) parts[i]=spawn(false);
+      }
+      ctx.globalCompositeOperation='source-over';
+      if(!reduce) raf=requestAnimationFrame(frame);
+    }
+    let raf=0;
+    resize(); addEventListener('resize',()=>{resize(); setMode(mode, cols.map(c=>'#'+c.map(v=>v.toString(16).padStart(2,'0')).join('')));});
+    return {setMode, start(){cancelAnimationFrame(raf); frame();}, stop(){cancelAnimationFrame(raf)}};
+  }
+
+  const page = Engine(document.getElementById('vfx'));
+  function applyGrade(name){
+    const g=GRADES[name]; if(!g||g===grade&&name!=='hero') return; grade=g;
+    root.style.setProperty('--g1',g.g1); root.style.setProperty('--g2',g.g2); root.style.setProperty('--g3',g.g3);
+    page.setMode(g.mode, g.g4?[g.g1,g.g2,g.g4]:[g.g1,g.g2]);
+    if(reduce) page.start();
+  }
+  applyGrade('hero'); page.start();
+
+  const io = new IntersectionObserver(es=>{
+    es.forEach(e=>{ if(e.isIntersecting) applyGrade(e.target.dataset.grade); });
+  },{rootMargin:'-45% 0px -45% 0px'});
+  document.querySelectorAll('[data-grade]').forEach(s=>io.observe(s));
+
+  /* gentle lift-in; content is visible before and without this */
+  if(!reduce && 'IntersectionObserver' in window){
+    const rv=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.remove('pre'); rv.unobserve(e.target);} }),{rootMargin:'0px 0px -8% 0px'});
+    document.querySelectorAll('.rv').forEach(el=>{
+      if(el.getBoundingClientRect().top>innerHeight){ el.classList.add('pre'); rv.observe(el); }
+    });
+  }
+
+  /* ---------- Script toggle: Devanagari <-> Telugu lipi (Unicode blocks align) ---------- */
+  const shlokas=[...document.querySelectorAll('.shloka')];
+  shlokas.forEach(s=>s.dataset.deva=s.innerHTML);
+  function toTelugu(str){
+    return str.replace(/[ऀ-ॣ०-ॿ]/g, ch=>String.fromCharCode(ch.charCodeAt(0)+0x300));
+  }
+  const tBtn=document.getElementById('scriptToggle');
+  let tel=true;
+  function renderScript(){
+    shlokas.forEach(s=>{
+      const html=s.dataset.deva;
+      s.innerHTML = tel ? html.replace(/^[^<]+|(?<=<br>)[^<]+/g, m=>toTelugu(m)) : html;
+    });
+    tBtn.innerHTML = tel ? 'Ślokas: <b>Telugu</b> / Devanāgarī' : 'Ślokas: Telugu / <b>Devanāgarī</b>';
+    tBtn.setAttribute('aria-pressed', String(!tel));
+    try{ localStorage.setItem('ky-script', tel?'te':'sa'); }catch(e){}
+  }
+  try{ if(localStorage.getItem('ky-script')==='sa') tel=false; }catch(e){}
+  renderScript();
+  tBtn.addEventListener('click',()=>{ tel=!tel; renderScript(); });
+
+  /* ---------- Trailer ---------- */
+  const CARDS=[
+    {k:'Kurukshetra · Before the war', tt:'పద్దెనిమిది అక్షౌహిణుల సైన్యం.', te:'Eighteen armies. One man who wants to walk away.', g:'doubt'},
+    {k:'Arjuna · 3.1', tt:'జ్ఞానమే గొప్పదైతే... నన్నెందుకు ఈ ఘోర కర్మలోకి నెడుతున్నావు?', te:'If wisdom is higher, why push me into this terrible deed?', g:'doubt'},
+    {k:'Krishna · 3.5', tt:'కర్మ చేయకుండా ఎవ్వరూ ఒక్క క్షణం కూడా ఉండలేరు.', te:'No one can stay without action, even for a moment.', g:'doubt', flash:true},
+    {k:'3.12', tt:'తీసుకుని తిరిగి ఇవ్వనివాడు... దొంగ.', te:'One who takes and never gives back is a thief.', g:'wheel'},
+    {k:'3.21', tt:'శ్రేష్ఠుడు ఏది చేస్తాడో, లోకం అదే చేస్తుంది.', te:'Whatever the great one does, the world follows.', g:'leader', flash:true},
+    {k:'3.27', tt:'"నేనే చేశాను" — అదే అహంకారం.', te:'"I am the doer." That is the ego\'s only line.', g:'guna'},
+    {k:'Arjuna · 3.36', tt:'మనిషిని బలవంతంగా పాపం వైపు లాగేది ఏది?', te:'What drags a man to wrong, even against his will?', g:'fire'},
+    {k:'Krishna · 3.37', tt:'కామం. క్రోధం. నీ లోపలి శత్రువు.', te:'Desire. Anger. The enemy within.', g:'fire', flash:true},
+    {k:'3.43', tt:'జహి శత్రుం మహాబాహో!', te:'Slay the enemy, mighty-armed one.', g:'fire', flash:true},
+    {k:'In your life · now', tt:'కర్మ యోగము', te:'KARMA YOGAM · The Yoga of Action', g:'finale'}
+  ];
+  const tr=document.getElementById('trailer'), card=document.getElementById('tcard'), flash=document.getElementById('tflash'), prog=document.getElementById('tprog');
+  const tEngine=Engine(document.getElementById('tcanvas'));
+  const DUR=reduce?6000:4600;
+  let ti=0, timer=0, opener=null;
+
+  function show(i){
+    const c=CARDS[i]; const g=GRADES[c.g];
+    card.classList.remove('play'); void card.offsetWidth;
+    card.querySelector('.k').textContent=c.k; card.querySelector('.tt').textContent=c.tt; card.querySelector('.te').textContent=c.te;
+    card.classList.add('play');
+    document.getElementById('tstage').style.background=`radial-gradient(ellipse at 50% 55%, ${g.g3}, #000 80%)`;
+    tEngine.setMode(g.mode, g.g4?[g.g1,g.g2,g.g4]:[g.g1,g.g2]); if(reduce) tEngine.start();
+    if(c.flash && !reduce){ flash.classList.remove('go'); void flash.offsetWidth; flash.classList.add('go'); hit(); }
+    prog.style.transition='none'; prog.style.width=(i/CARDS.length*100)+'%';
+    requestAnimationFrame(()=>{ prog.style.transition=`width ${DUR}ms linear`; prog.style.width=((i+1)/CARDS.length*100)+'%'; });
+    clearTimeout(timer);
+    timer=setTimeout(()=>{ if(i+1<CARDS.length) show(ti=i+1); else setTimeout(closeTrailer,1200); }, DUR);
+  }
+  function openTrailer(){
+    opener=document.activeElement; tr.hidden=false; document.body.style.overflow='hidden';
+    tEngine.start(); show(ti=0); document.getElementById('tclose').focus();
+  }
+  function closeTrailer(){
+    clearTimeout(timer); tEngine.stop(); tr.hidden=true; document.body.style.overflow=''; stopSound();
+    if(opener) opener.focus();
+  }
+  document.getElementById('playTrailer').addEventListener('click',openTrailer);
+  document.getElementById('tclose').addEventListener('click',closeTrailer);
+  addEventListener('keydown',e=>{ if(!tr.hidden && e.key==='Escape') closeTrailer(); if(!tr.hidden && e.key==='ArrowRight' && ti+1<CARDS.length) show(++ti); });
+
+  /* ---------- Optional score: tanpura-like drone + drum hit on flashes ---------- */
+  let ac=null, drone=null;
+  const sBtn=document.getElementById('tsound');
+  function startSound(){
+    try{
+      ac=ac||new (window.AudioContext||window.webkitAudioContext)();
+      const master=ac.createGain(); master.gain.value=0; master.connect(ac.destination);
+      master.gain.linearRampToValueAtTime(.18, ac.currentTime+2);
+      const oscs=[[110,'sawtooth',.18],[165,'sawtooth',.12],[220,'triangle',.2],[55,'sine',.5]].map(([f,type,v])=>{
+        const o=ac.createOscillator(), g=ac.createGain(), lp=ac.createBiquadFilter();
+        o.type=type; o.frequency.value=f; lp.type='lowpass'; lp.frequency.value=900; g.gain.value=v;
+        o.connect(lp); lp.connect(g); g.connect(master); o.start(); return o;
+      });
+      drone={master,oscs}; sBtn.textContent='Sound on'; sBtn.setAttribute('aria-pressed','true');
+    }catch(e){ sBtn.textContent='Sound unavailable'; }
+  }
+  function stopSound(){
+    if(drone){ drone.oscs.forEach(o=>{try{o.stop()}catch(e){}}); drone.master.disconnect(); drone=null; }
+    sBtn.textContent='Sound off'; sBtn.setAttribute('aria-pressed','false');
+  }
+  function hit(){
+    if(!drone||!ac) return;
+    const o=ac.createOscillator(), g=ac.createGain(); o.type='sine';
+    o.frequency.setValueAtTime(140,ac.currentTime); o.frequency.exponentialRampToValueAtTime(40,ac.currentTime+.5);
+    g.gain.setValueAtTime(.9,ac.currentTime); g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+.7);
+    o.connect(g); g.connect(ac.destination); o.start(); o.stop(ac.currentTime+.8);
+  }
+  sBtn.addEventListener('click',()=> drone?stopSound():startSound());
+})();
+</script>
